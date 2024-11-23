@@ -1,17 +1,30 @@
-# Transport Interstellar Mechatronics (a Laravel template repository)
+# HomeDash
 
-This application is a starting point for building an inventory management system with the [Laravel](https://laravel.com/) PHP framework.
+A dashboard for the family computer.
 
-It's dedicated to my father, who passed away in 2014. He once asked me if I could make an app that tracked inventory for the truck parts and repair company he was a manager for. He said he wanted to know when to order more parts so they wouldn't run out. I wasn't good enough back then, but I am now. This is for you Dad.
+Built with Laravel, InertiaJS, and React.
 
-It's built with Laravel and React.
-
+-   [Feature Roadmap](#feature-roadmap)
 -   [Local System Requirements](#system-requirements)
 -   [Installation](#installation)
 -   [Features](#features)
 -   [Routes](#routes)
 -   [Additional Documentation](#additional-documentation)
 -   [About Laravel](#about-laravel)
+
+## Feature Roadmap
+
+These are in no particular order the further down the list you go. The first four are the most important.
+
+-   [ ] Home page with layout and navigation
+-   [ ] "Days until" widget for major events (birthdays, holidays, trips, etc.)
+-   [ ] "Is it too loud in here" widget for quiet time on the weekends.
+-   [ ] Map widget for showing our kids all the places we've traveled together
+-   [ ] Daily task or chore list for each user
+-   [ ] "What's for breakfast" widget
+-   [ ] Weather widget
+-   [ ] Calendar widget
+-   [ ] "What's for dinner" widget
 
 ## Local System Requirements
 
@@ -42,7 +55,6 @@ Laravel first-party packages and features:
 
 -   [Public Web Routes](#public-web-routes)
 -   [Guest Web Routes](#guest-web-routes)
--   [Authenticated Web Routes](#authenticated-web-routes)
 
 ### Public Web Routes
 
@@ -76,18 +88,6 @@ Laravel first-party packages and features:
 | GET | `/profile` | view | profile.edit
 | PATCH | `/profile` | update | profile.update
 | DELETE | `/profile` | destroy | profile.destroy
-
-### Authenticated API Routes
-
-| Verb | URI | Action | Route Name
-| GET | `/api/user` | closure | -
-| GET | `/parts` | index | parts.index
-| GET | `/parts/create` | create | parts.create
-| POST | `/parts` | store | parts.store
-| GET | `/parts/{id}` | show | parts.show
-| GET | `/parts/{id}/edit` | edit | parts.edit
-| PUT/PATCH | `/parts/{id}` | update | parts.update
-| DELETE | `/parts/{id}` | destroy | parts.destroy
 
 ## Additional Documentation
 
