@@ -1,0 +1,78 @@
+{
+    "folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "../laravel-snippets"
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "amiralizadeh9480.laravel-extra-intellisense",
+            "ms-azuretools.vscode-docker",
+            "bradlc.vscode-tailwindcss",
+            "redhat.vscode-yaml",
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Launch",
+                "dependsOrder": "sequence",
+                "dependsOn": [
+                    "Start Application",
+                ],
+            },
+            {
+                "label": "Start Application",
+                "type": "shell",
+                "command": "composer",
+                "args": ["run", "dev"],
+            },
+            {
+                "label": "Git: Prune Branches Not In Origin",
+                "type": "shell",
+                "command": "./bin/gitprune",
+                "problemMatcher": [
+                    "$msCompile"
+                ],
+                "presentation": {
+                  "close": true,
+                  "revealProblems": "onProblem",
+                  "reveal": "silent"
+                },
+                "windows": {
+                    "options": {
+                        "shell": {
+                            "executable": "C:\\Windows\\system32\\wsl.exe",
+                        }
+                    }
+                },
+            },
+            {
+                "label": "Git: Fetch Branches Not In Local",
+                "type": "shell",
+                "command": "./bin/gitfetch",
+                "problemMatcher": [
+                    "$msCompile"
+                ],
+                "presentation": {
+                    "revealProblems": "onProblem",
+                    "reveal": "silent"
+                },
+                "windows": {
+                    "options": {
+                        "shell": {
+                            "executable": "C:\\Windows\\system32\\wsl.exe",
+                        }
+                    }
+                },
+            }
+        ]
+    },
+    "settings": {
+        "workbench.colorTheme": "Default Dark Modern"
+    }
+}
