@@ -1,0 +1,18 @@
+created:
+    - app/Http/Controllers/LoudnessController.php
+    - app/Http/Controllers/EventController.php
+    - database/factories/EventFactory.php
+    - database/factories/ChoreFactory.php
+    - database/migrations/2024_11_23_222941_create_events_table.php
+    - database/migrations/2024_11_23_222942_create_chores_table.php
+    - app/Models/Event.php
+    - app/Models/Chore.php
+    - tests/Feature/Http/Controllers/LoudnessControllerTest.php
+    - tests/Feature/Http/Controllers/EventControllerTest.php
+    - resources/views/loudness/show.blade.php
+    - resources/views/event/index.blade.php
+updated:
+    - routes/web.php
+models:
+    Event: { name: 'string:100', description: 'string:255', start_date: datetime, end_date: 'datetime nullable', latitude: 'decimal:10,8', longitude: 'decimal:11,8', city: integer, state: integer, folder_name: 'string:255', show_on_countdown: 'boolean default:false', is_trip: 'boolean default:false' }
+    Chore: { name: 'string:100', description: 'string:255', occurrence: 'enum:once,daily,weekly,monthly,yearly' }
