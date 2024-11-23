@@ -1,8 +1,10 @@
-# HomeDash
+# Rememboard
 
 A dashboard for the family computer.
 
-Built with Laravel, InertiaJS, and React.
+I am building this in public and documenting it on my blog at [zacharywatkins.com](https://zacharywatkins.com/articles/tags/rememboard/).
+
+_Built with Laravel, InertiaJS, and React._
 
 -   [Feature Roadmap](#feature-roadmap)
 -   [Local System Requirements](#system-requirements)
