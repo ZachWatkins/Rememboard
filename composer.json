@@ -1,14 +1,14 @@
 {
-    "name": "zachwatkins/laravel-template",
+    "name": "zachwatkins/rememboard",
     "type": "project",
-    "description": "A Laravel template for starting new projects.",
+    "description": "A dashboard for the family computer.",
     "keywords": [
         "framework",
         "laravel"
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
