@@ -27,7 +27,6 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
-Route::resource('loudnesses', App\Http\Controllers\LoudnessController::class)->only('show');
-
+Route::get('loudness', [App\Http\Controllers\LoudnessController::class, 'show'])->name('loudness.show');
 Route::get('events/countdowns', [App\Http\Controllers\EventController::class, 'countdowns']);
 Route::get('events/trips', [App\Http\Controllers\EventController::class, 'trips']);
