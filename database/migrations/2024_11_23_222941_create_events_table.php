@@ -19,8 +19,8 @@ return new class extends Migration
             $table->dateTime('end_date')->nullable();
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 11, 8);
-            $table->integer('city');
-            $table->integer('state');
+            $table->string('city', 100);
+            $table->string('state', 100);
             $table->string('folder_name', 255);
             $table->boolean('show_on_countdown')->default(false);
             $table->boolean('is_trip')->default(false);
