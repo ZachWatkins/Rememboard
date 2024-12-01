@@ -6,8 +6,8 @@ models:
     end_date: datetime nullable
     latitude: decimal:10,8
     longitude: decimal:11,8
-    city: integer
-    state: integer
+    city: string:100
+    state: string:100
     folder_name: string:255
     show_on_countdown: boolean default:false
     is_trip: boolean default:false
@@ -17,7 +17,7 @@ models:
     occurrence: enum:once,daily,weekly,monthly,yearly
 
 controllers:
-  Loudness:
+  LoudnessController:
     show:
       render: loudness.show
   Event:
