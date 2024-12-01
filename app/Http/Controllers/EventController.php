@@ -66,9 +66,9 @@ class EventController extends Controller
         return view('event.index', compact('events'));
     }
 
-    public function trips(Request $request): JsonResponse
+    public function trips(): JsonResponse
     {
-        $trips = Event::where('is_trip', $request->input('is_trip'))->orderBy('start_date')->get();
+        $trips = Event::where('is_trip', true)->get();
 
         return response()->json($trips);
     }

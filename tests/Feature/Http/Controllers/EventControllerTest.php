@@ -173,10 +173,10 @@ test('countdowns displays view', function (): void {
 });
 
 test('trips responds with', function (): void {
-    $trips = Event::factory()->count(3)->create();
+    $trips = Event::factory()->count(3)->create(['is_trip' => true]);
 
     $response = get(route('events.trips'));
 
     $response->assertOk();
-    $response->assertJson($trips);
+    $response->assertJson($trips->toArray());
 });
