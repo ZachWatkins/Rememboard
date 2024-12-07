@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Event;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class EventSeeder extends Seeder
@@ -17,14 +15,15 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        if (Storage::exists(database_path('seeders/events.json'))) {
-            $events = json_decode(Storage::get(database_path('seeders/events.json')), true);
-
+        $path = database_path('seeders' . DIRECTORY_SEPARATOR . 'events.json');
+        if (\file_exists($path)) {
+            $events = json_decode(\file_get_contents($path), true);
             foreach ($events as $event) {
                 Event::create($event);
             }
+            $this->command->info( count($events) . ' Events created!');
         } else {
-            Log::info('File not found: ' . database_path('seeders/events.json'));
+            $this->command->error('File not found: ' . $path);
         }
     }
 }
