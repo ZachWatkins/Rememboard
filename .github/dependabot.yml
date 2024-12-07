@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    ignore:
+      - dependency-name: "laravel*"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    ignore:
+      - dependency-name: "react*"
+        update-types: ["version-update:semver-major"]
