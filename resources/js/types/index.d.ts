@@ -12,3 +12,16 @@ export type PageProps<
         user: User;
     };
 };
+
+export interface Event {
+    id: number;
+    name: string;
+    description: string;
+    start_date: string;
+    end_date: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    city: string | null;
+    state: string | null;
+    countdown: string;
+}
