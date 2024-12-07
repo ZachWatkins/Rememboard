@@ -11,6 +11,7 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        'events' => \App\Models\Event::where('show_on_countdown', true)->get(),
     ]);
 });
 
