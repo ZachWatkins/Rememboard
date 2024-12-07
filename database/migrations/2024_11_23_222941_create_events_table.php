@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
+            $table->string('name', 100)->unique();
             $table->string('description', 255);
             $table->dateTime('start_date');
             $table->dateTime('end_date')->nullable();
-            $table->decimal('latitude', 10, 8);
-            $table->decimal('longitude', 11, 8);
-            $table->string('city', 100);
-            $table->string('state', 100);
-            $table->string('folder_name', 255);
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+            $table->string('city', 100)->nullable();
+            $table->string('state', 100)->nullable();
+            $table->string('folder_name', 255)->nullable();
             $table->boolean('show_on_countdown')->default(false);
             $table->boolean('is_trip')->default(false);
             $table->timestamps();
