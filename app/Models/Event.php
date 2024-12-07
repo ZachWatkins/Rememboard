@@ -42,4 +42,11 @@ class Event extends Model
         'show_on_countdown' => 'boolean',
         'is_trip' => 'boolean',
     ];
+
+    protected $appends = ['countdown'];
+
+    public function getCountdownAttribute()
+    {
+        return $this->start_date->diffForHumans(now(), \Carbon\CarbonInterface::DIFF_ABSOLUTE, true, 6);
+    }
 }
