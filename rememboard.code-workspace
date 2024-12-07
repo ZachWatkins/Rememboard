@@ -30,6 +30,9 @@
                 "type": "shell",
                 "command": "composer",
                 "args": ["run", "dev"],
+                "windows": {
+                    "args": ["run", "dev-win"],
+                }
             },
             {
                 "label": "Git: Prune Branches Not In Origin",
