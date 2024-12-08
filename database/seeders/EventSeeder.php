@@ -18,10 +18,21 @@ class EventSeeder extends Seeder
         $path = database_path('seeders' . DIRECTORY_SEPARATOR . 'events.json');
         if (\file_exists($path)) {
             $events = json_decode(\file_get_contents($path), true);
+            $skipped = 0;
+            $created = 0;
             foreach ($events as $event) {
-                Event::create($event);
+                if (Event::where('name', $event['name'])->exists()) {
+                    $skipped++;
+                } else {
+                    $created++;
+                    Event::create($event);
+                }
             }
-            $this->command->info( count($events) . ' Events created!');
+            if ($skipped) {
+                $this->command->warn($created . ' Events created and ' . $skipped . ' Events skipped.');
+            } else {
+                $this->command->info($created . ' Events created.');
+            }
         } else {
             $this->command->error('File not found: ' . $path);
         }
