@@ -21,6 +21,8 @@ return new class extends Migration
             $table->decimal('longitude', 11, 8)->nullable();
             $table->string('city', 100)->nullable();
             $table->string('state', 100)->nullable();
+            $table->string('timezone', 100)->nullable();
+            $table->string('timezone_offset', 10)->nullable();
             $table->string('folder_name', 255)->nullable();
             $table->boolean('show_on_countdown')->default(false);
             $table->boolean('is_trip')->default(false);
