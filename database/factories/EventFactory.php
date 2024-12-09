@@ -20,11 +20,12 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+        $startDate = $this->faker->dateTime();
         return [
             'name' => $this->faker->name(100),
             'description' => $this->faker->text(255),
-            'start_date' => $this->faker->dateTime(),
-            'end_date' => $this->faker->dateTime(),
+            'start_date' => $startDate,
+            'end_date' => $this->faker->optional()->dateTimeBetween($startDate),
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),
             'city' => $this->faker->city(),
