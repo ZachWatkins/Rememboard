@@ -16,7 +16,6 @@ class EventSeeder extends Seeder
     public function run(): void
     {
         $path = database_path('seeders' . DIRECTORY_SEPARATOR . 'events*.json');
-        // Match the file name with a wildcard.
         $matches = glob($path);
         if (empty($matches)) {
             $this->command->error('File not found: ' . $path);
