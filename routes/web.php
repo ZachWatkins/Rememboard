@@ -34,4 +34,4 @@ Route::get('events/countdowns', [App\Http\Controllers\EventController::class, 'c
 Route::get('events/trips', [App\Http\Controllers\EventController::class, 'trips'])->name('events.trips');
 
 
-Route::resource('events', App\Http\Controllers\EventController::class);
+Route::resource('events', App\Http\Controllers\EventController::class)->middleware('convert.event.timezone');
