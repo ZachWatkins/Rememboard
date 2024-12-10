@@ -8,8 +8,6 @@ models:
     longitude: decimal:11,8 nullable
     city: string:100 nullable
     state: string:100 nullable
-    timezone: string:100 nullable
-    timezone_offset: string:10 nullable
     folder_name: string:255 nullable
     show_on_countdown: boolean default:false
     is_trip: boolean default:false

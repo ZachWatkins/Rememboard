@@ -23,8 +23,6 @@ class Event extends Model
         'longitude',
         'city',
         'state',
-        'timezone',
-        'timezone_offset',
         'folder_name',
         'show_on_countdown',
         'is_trip',
