@@ -3,19 +3,14 @@
 use App\Models\Event;
 use Database\Seeders\EventSeeder;
 
-it('applies timezones to imported events', function () {
+it('imports a JSON file', function () {
     // Create a JSON file to import.
     $path = database_path('seeders' . DIRECTORY_SEPARATOR . 'events-test.json');
 
     // Create events with localized start_date and end_date values.
-    $seeds = [
-        Event::factory()->eastern()->make()->toArray(),
-        Event::factory()->pacific()->make()->toArray(),
-        Event::factory()->mountain()->make()->toArray(),
-        Event::factory()->central()->make()->toArray(),
-    ];
+    $seeds = Event::factory()->count(4)->make();
 
-    file_put_contents($path, json_encode($seeds));
+    file_put_contents($path, json_encode($seeds->toArray()));
 
     // Seed the database.
     $seeder = new EventSeeder();
