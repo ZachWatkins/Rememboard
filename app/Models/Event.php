@@ -23,6 +23,8 @@ class Event extends Model
         'longitude',
         'city',
         'state',
+        'timezone',
+        'timezone_offset',
         'folder_name',
         'show_on_countdown',
         'is_trip',
@@ -42,4 +44,11 @@ class Event extends Model
         'show_on_countdown' => 'boolean',
         'is_trip' => 'boolean',
     ];
+
+    protected $appends = ['countdown'];
+
+    public function getCountdownAttribute()
+    {
+        return $this->start_date->diffForHumans(now(), \Carbon\CarbonInterface::DIFF_ABSOLUTE, true, 6);
+    }
 }
