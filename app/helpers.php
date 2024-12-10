@@ -13,7 +13,7 @@ if (!function_exists('convertFromUserTimezone')) {
      */
     function convertFromUserTimezone(string $datetime): string
     {
-        $userTimezone = \Illuminate\Support\Facades\Auth::user()->timezone; // Assuming the user has a 'timezone' attribute
+        $userTimezone = \Illuminate\Support\Facades\Auth::user()->timezone;
         $timestamp = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $userTimezone);
         return $timestamp->setTimezone('UTC')->toDateTimeString();
     }
