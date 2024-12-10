@@ -29,6 +29,14 @@ class EventSeeder extends Seeder
                 if (Event::where('name', $event['name'])->exists()) {
                     $skipped++;
                 } else {
+                    // If the data includes a timezone attribute, convert the start_date and end_date to UTC from the given timezone.
+                    if (isset($event['timezone'])) {
+                        $event['start_date'] = convertFromTimezone($event['start_date'], $event['timezone']);
+                        if (isset($event['end_date']) && $event['end_date']) {
+                            $event['end_date'] = convertFromTimezone($event['end_date'], $event['timezone']);
+                        }
+                        unset($event['timezone']);
+                    }
                     Event::create($event);
                     $created++;
                 }
