@@ -19,7 +19,7 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-        $startDate = $this->faker->dateTime();
+        $startDate = $this->faker->dateTimeBetween('-5 years', '-1 year');
         return [
             'name' => $this->faker->name(100),
             'description' => $this->faker->text(255),
