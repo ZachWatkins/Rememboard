@@ -30,18 +30,6 @@ class EventSeeder extends Seeder
                 if (Event::where('name', $event['name'])->exists()) {
                     $skipped++;
                 } else {
-                    // Apply the timezone offset to the start and end dates if present.
-                    if (isset($event['timezone_offset'])) {
-                        $event['start_date'] = \Carbon\Carbon::parse($event['start_date'])->addMinutes($event['timezone_offset']);
-                        if (isset($event['end_date'])) {
-                            $event['end_date'] = \Carbon\Carbon::parse($event['end_date'])->addMinutes($event['timezone_offset']);
-                        }
-                    } elseif (isset($event['timezone'])) {
-                        $event['start_date'] = \Carbon\Carbon::parse($event['start_date'], $event['timezone']);
-                        if (isset($event['end_date'])) {
-                            $event['end_date'] = \Carbon\Carbon::parse($event['end_date'], $event['timezone']);
-                        }
-                    }
                     Event::create($event);
                     $created++;
                 }
