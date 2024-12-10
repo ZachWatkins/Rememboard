@@ -19,10 +19,10 @@ class ConvertEventTimezone
     {
         if (Auth::check()) {
             if ($request->has('start_date')) {
-                $request->merge(['start_date' => convertToUserTimezone($request->input('start_date'))]);
+                $request->merge(['start_date' => convertFromUserTimezone($request->input('start_date'))]);
             }
             if ($request->has('end_date')) {
-                $request->merge(['end_date' => convertToUserTimezone($request->input('end_date'))]);
+                $request->merge(['end_date' => convertFromUserTimezone($request->input('end_date'))]);
             }
         }
         return $next($request);
