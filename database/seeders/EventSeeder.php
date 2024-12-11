@@ -13,12 +13,14 @@ class EventSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run(string $path = ''): void
     {
-        $path = database_path('seeders' . DIRECTORY_SEPARATOR . 'events*.json');
+        if (!$path) {
+            $path = database_path('seeders' . DIRECTORY_SEPARATOR . 'events*.json');
+        }
         $matches = glob($path);
         if (empty($matches)) {
-            $this->command->error('File not found: ' . $path);
+            $this->command?->error('File not found: ' . $path);
             return;
         }
         foreach ($matches as $path) {
@@ -31,9 +33,9 @@ class EventSeeder extends Seeder
                 } else {
                     // If the data includes a timezone attribute, convert the start_date and end_date to UTC from the given timezone.
                     if (isset($event['timezone'])) {
-                        $event['start_date'] = convertFromTimezone($event['start_date'], $event['timezone']);
+                        $event['start_date'] = \convertFromTimezone($event['start_date'], $event['timezone']);
                         if (isset($event['end_date']) && $event['end_date']) {
-                            $event['end_date'] = convertFromTimezone($event['end_date'], $event['timezone']);
+                            $event['end_date'] = \convertFromTimezone($event['end_date'], $event['timezone']);
                         }
                         unset($event['timezone']);
                     }
@@ -42,9 +44,9 @@ class EventSeeder extends Seeder
                 }
             }
             if ($skipped) {
-                $this->command->warn($created . ' Events created and ' . $skipped . ' Events skipped.');
+                $this->command?->warn($created . ' Events created and ' . $skipped . ' Events skipped.');
             } else {
-                $this->command->info($created . ' Events created.');
+                $this->command?->info($created . ' Events created.');
             }
         }
     }
