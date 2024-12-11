@@ -35,8 +35,6 @@ class Event extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
         'show_on_countdown' => 'boolean',
