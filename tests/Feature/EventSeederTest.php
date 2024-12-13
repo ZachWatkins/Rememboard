@@ -16,10 +16,11 @@ it('imports a JSON file', function () {
     $path = database_path('seeders' . DIRECTORY_SEPARATOR . 'events-test.json');
     $seeds = Event::factory()->count(4)->make();
 
-    file_put_contents($path, json_encode($seeds->toArray()));
+    expect(Event::count())->toBe(0);
 
-    $seeder = new EventSeeder();
-    $seeder->run($path);
+    file_put_contents($path, json_encode($seeds->toArray()));
+    (new EventSeeder())->run($path);
+
     $events = Event::all();
 
     expect($events->count())->toBe(4);
@@ -30,19 +31,18 @@ it('Converts start_date and end_date from CST to UTC', function () {
     $seeds = Event::factory()->count(4)->make();
 
     $seeds = $seeds->map(function ($seed) {
-        $seed->timezone = 'America/Chicago';
+        $seed->timezone = 'America/Chicago'; // CST.
         return $seed;
     });
 
     file_put_contents($path, json_encode($seeds));
 
-    $seeder = new EventSeeder();
-    $seeder->run($path);
+    (new EventSeeder())->run($path);
     $events = Event::all();
 
-    $events->each(function ($event) {
-        // Expect the seeded CST date to be identical to the UTC date when converted to UTC.
-        expect($event->start_date)->not->toBe((new \DateTime($event->start_date))->format('Y-m-d H:i:s'));
+    // Expect the file's CST dates to be correctly converted to UTC once seeded.
+    $events->each(function ($event, $index) use ($seeds) {
+        expect($event->start_date)->not->toBe((new \DateTime($seeds[$index]->start_date))->format('Y-m-d H:i:s'));
         expect($event->start_date)->toBe((new \DateTime($event->start_date))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
     });
 });
