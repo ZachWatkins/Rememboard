@@ -24,6 +24,24 @@ test('index displays view', function (): void {
 });
 
 test('index returns event dates as they are in the database', function (): void {
+    $events = Event::factory()->count(3)->withEndDate()->create();
+
+    $response = get(route('events.index'));
+
+    $response->assertOk();
+    $response->assertViewIs('event.index');
+    $response->assertViewHas('events');
+
+    $viewEvents = $response['events'];
+    $viewEvents->each(function ($event) use ($events) {
+        $stored = $events->firstWhere('id', $event->id);
+
+        expect($event->start_date)->toBe($stored->start_date);
+        expect($event->end_date)->toBe($stored->end_date);
+    });
+});
+
+test('index returns event dates for user timezone', function (): void {
     $user = \App\Models\User::factory()->centralTz()->create();
     $events = Event::factory()->count(3)->withEndDate()->create();
 
@@ -37,8 +55,8 @@ test('index returns event dates as they are in the database', function (): void 
     $viewEvents->each(function ($event) use ($events, $user) {
         $stored = $events->firstWhere('id', $event->id);
 
-        expect($event->start_date)->toBe($stored->start_date);
-        expect($event->end_date)->toBe($stored->end_date);
+        expect($event->start_date)->toBe((new \DateTime($stored->start_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d H:i:s'));
+        expect($event->end_date)->toBe((new \DateTime($stored->end_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d H:i:s'));
     });
 });
 
@@ -112,6 +130,20 @@ test('show displays view', function (): void {
 });
 
 test('show returns event dates as they are in the database', function (): void {
+    $event = Event::factory()->withEndDate()->create();
+
+    $response = get(route('events.show', $event));
+
+    $response->assertOk();
+    $response->assertViewIs('event.show');
+    $response->assertViewHas('event');
+
+    $viewEvent = $response['event'];
+    expect($viewEvent->start_date)->toBe($event->start_date);
+    expect($viewEvent->end_date)->toBe($event->end_date);
+});
+
+test('show returns event dates for user timezone', function (): void {
     $user = \App\Models\User::factory()->centralTz()->create();
     $event = Event::factory()->withEndDate()->create();
 
@@ -122,8 +154,8 @@ test('show returns event dates as they are in the database', function (): void {
     $response->assertViewHas('event');
 
     $viewEvent = $response['event'];
-    expect($viewEvent->start_date)->toBe($event->start_date);
-    expect($viewEvent->end_date)->toBe($event->end_date);
+    expect($viewEvent->start_date)->toBe((new \DateTime($event->start_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d H:i:s'));
+    expect($viewEvent->end_date)->toBe((new \DateTime($event->end_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d H:i:s'));
 });
 
 test('edit displays view', function (): void {
