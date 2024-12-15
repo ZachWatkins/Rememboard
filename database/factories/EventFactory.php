@@ -34,4 +34,11 @@ class EventFactory extends Factory
             'is_trip' => $this->faker->boolean(),
         ];
     }
+
+    public function withEndDate(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'end_date' => $this->faker->dateTimeBetween($attributes['start_date'])->format('Y-m-d H:i:s'),
+        ]);
+    }
 }
