@@ -11,8 +11,11 @@ if (!function_exists('convertFromUserTimezone')) {
      * @param string $datetime
      * @return string
      */
-    function convertFromUserTimezone(?string $datetime): string
+    function convertFromUserTimezone(?string $datetime): string | null
     {
+        if (!$datetime) {
+            return null;
+        }
         $userTimezone = \Illuminate\Support\Facades\Auth::user()?->timezone;
         if (!$userTimezone) {
             return $datetime;
@@ -29,8 +32,11 @@ if (!function_exists('convertToUserTimezone')) {
      * @param string $datetime
      * @return string
      */
-    function convertToUserTimezone(?string $datetime): string
+    function convertToUserTimezone(?string $datetime): string | null
     {
+        if (!$datetime) {
+            return null;
+        }
         $userTimezone = \Illuminate\Support\Facades\Auth::user()?->timezone;
         if (!$userTimezone) {
             return $datetime;
