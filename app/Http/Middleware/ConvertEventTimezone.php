@@ -16,15 +16,13 @@ class ConvertEventTimezone
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check()) {
-            $requestMethod = $request->method();
-            if ($requestMethod === 'POST' || $requestMethod === 'PUT' || $requestMethod === 'PATCH') {
-                if ($request->has('start_date')) {
-                    $request->merge(['start_date' => convertFromUserTimezone($request->input('start_date'))]);
-                }
-                if ($request->has('end_date')) {
-                    $request->merge(['end_date' => convertFromUserTimezone($request->input('end_date'))]);
-                }
+        $requestMethod = $request->method();
+        if ($requestMethod === 'POST' || $requestMethod === 'PUT' || $requestMethod === 'PATCH') {
+            if ($request->has('start_date')) {
+                $request->merge(['start_date' => \dateFromSessionTime($request->input('start_date'))]);
+            }
+            if ($request->has('end_date')) {
+                $request->merge(['end_date' => \dateFromSessionTime($request->input('end_date'))]);
             }
         }
         return $next($request);
