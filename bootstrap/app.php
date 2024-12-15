@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'event.timezone' => \App\Http\Middleware\ConvertEventTimezone::class,
+            'timezone.offset' => \App\Http\Middleware\EnsureTimezoneOffset::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
