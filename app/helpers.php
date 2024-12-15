@@ -56,7 +56,7 @@ if (!function_exists('convertFromTimezone')) {
      */
     function convertFromTimezone(string $datetime, string $timezone): string
     {
-        $timestamp = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $timezone);
+        $timestamp = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i:s', $datetime, $timezone);
         return $timestamp->setTimezone('UTC')->toDateTimeString();
     }
 }
