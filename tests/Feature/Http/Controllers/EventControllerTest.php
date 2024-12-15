@@ -14,13 +14,32 @@ use function Pest\Laravel\put;
 uses(\JMac\Testing\Traits\AdditionalAssertions::class);
 
 test('index displays view', function (): void {
-    $events = Event::factory()->count(3)->create();
+    Event::factory()->count(3)->create();
 
     $response = get(route('events.index'));
 
     $response->assertOk();
     $response->assertViewIs('event.index');
     $response->assertViewHas('events');
+});
+
+test('index returns event dates as they are in the database', function (): void {
+    $user = \App\Models\User::factory()->centralTz()->create();
+    $events = Event::factory()->count(3)->withEndDate()->create();
+
+    $response = $this->actingAs($user)->get(route('events.index'));
+
+    $response->assertOk();
+    $response->assertViewIs('event.index');
+    $response->assertViewHas('events');
+
+    $viewEvents = $response['events'];
+    $viewEvents->each(function ($event) use ($events, $user) {
+        $stored = $events->firstWhere('id', $event->id);
+
+        expect($event->start_date)->toBe($stored->start_date);
+        expect($event->end_date)->toBe($stored->end_date);
+    });
 });
 
 test('create displays view', function (): void {
@@ -90,6 +109,21 @@ test('show displays view', function (): void {
     $response->assertOk();
     $response->assertViewIs('event.show');
     $response->assertViewHas('event');
+});
+
+test('show returns event dates as they are in the database', function (): void {
+    $user = \App\Models\User::factory()->centralTz()->create();
+    $event = Event::factory()->withEndDate()->create();
+
+    $response = $this->actingAs($user)->get(route('events.show', $event));
+
+    $response->assertOk();
+    $response->assertViewIs('event.show');
+    $response->assertViewHas('event');
+
+    $viewEvent = $response['event'];
+    expect($viewEvent->start_date)->toBe($event->start_date);
+    expect($viewEvent->end_date)->toBe($event->end_date);
 });
 
 test('edit displays view', function (): void {
