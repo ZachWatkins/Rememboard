@@ -11,7 +11,7 @@ if (!function_exists('convertFromUserTimezone')) {
      * @param string $datetime
      * @return string
      */
-    function convertFromUserTimezone(string $datetime):
+    function convertFromUserTimezone(string $datetime): string
     {
         $userTimezone = \Illuminate\Support\Facades\Auth::user()->timezone;
         $timestamp = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $userTimezone);
