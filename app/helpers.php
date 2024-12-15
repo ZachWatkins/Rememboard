@@ -13,7 +13,10 @@ if (!function_exists('convertFromUserTimezone')) {
      */
     function convertFromUserTimezone(string $datetime): string
     {
-        $userTimezone = \Illuminate\Support\Facades\Auth::user()->timezone;
+        $userTimezone = \Illuminate\Support\Facades\Auth::user()?->timezone;
+        if (!$userTimezone) {
+            return $datetime;
+        }
         $timestamp = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $userTimezone);
         return $timestamp->setTimezone('UTC')->toDateTimeString();
     }
@@ -28,9 +31,12 @@ if (!function_exists('convertToUserTimezone')) {
      */
     function convertToUserTimezone(string $datetime): string
     {
-        $userTimezone = \Illuminate\Support\Facades\Auth::user()->timezone;
-        $timestamp = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $userTimezone);
-        return $timestamp->setTimezone('UTC')->toDateTimeString();
+        $userTimezone = \Illuminate\Support\Facades\Auth::user()?->timezone;
+        if (!$userTimezone) {
+            return $datetime;
+        }
+        $timestamp = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $datetime, 'UTC');
+        return $timestamp->setTimezone($userTimezone)->toDateTimeString();
     }
 }
 
