@@ -6,12 +6,27 @@
 
 if (!function_exists('convertFromUserTimezone')) {
     /**
+     * Convert a datetime string from the user's timezone to UTC.
+     *
+     * @param string $datetime
+     * @return string
+     */
+    function convertFromUserTimezone(string $datetime):
+    {
+        $userTimezone = \Illuminate\Support\Facades\Auth::user()->timezone;
+        $timestamp = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $userTimezone);
+        return $timestamp->setTimezone('UTC')->toDateTimeString();
+    }
+}
+
+if (!function_exists('convertToUserTimezone')) {
+    /**
      * Convert a datetime string to the user's timezone.
      *
      * @param string $datetime
      * @return string
      */
-    function convertFromUserTimezone(string $datetime): string
+    function convertToUserTimezone(string $datetime): string
     {
         $userTimezone = \Illuminate\Support\Facades\Auth::user()->timezone;
         $timestamp = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $userTimezone);
