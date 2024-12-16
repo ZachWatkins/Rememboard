@@ -19,12 +19,12 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-        $startDate = $this->faker->dateTimeBetween('-5 years', '-1 year')->format('Y-m-d\TH:i:s');
+        $startDate = $this->faker->dateTimeBetween('-5 years', '-1 year')->format('Y-m-d H:i:s');
         return [
             'name' => $this->faker->name(100),
             'description' => $this->faker->text(255),
             'start_date' => $startDate,
-            'end_date' => $this->faker->optional()->dateTimeBetween($startDate)?->format('Y-m-d\TH:i:s'),
+            'end_date' => $this->faker->optional()->dateTimeBetween($startDate)?->format('Y-m-d H:i:s'),
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),
             'city' => $this->faker->city(),
@@ -38,7 +38,7 @@ class EventFactory extends Factory
     public function withEndDate(): static
     {
         return $this->state(fn(array $attributes) => [
-            'end_date' => $this->faker->dateTimeBetween($attributes['start_date'])->format('Y-m-d\TH:i:s'),
+            'end_date' => $this->faker->dateTimeBetween($attributes['start_date'])->format('Y-m-d H:i:s'),
         ]);
     }
 }

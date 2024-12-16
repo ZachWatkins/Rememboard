@@ -42,7 +42,7 @@ it('Converts start_date and end_date from CST to UTC', function () {
 
     // Expect the file's CST dates to be correctly converted to UTC once seeded.
     $events->each(function ($event, $index) use ($seeds) {
-        expect($event->start_date)->not->toBe((new \DateTime($seeds[$index]->start_date))->format('Y-m-d\TH:i:s'));
-        expect($event->start_date)->toBe((new \DateTime($event->start_date))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s'));
+        expect($event->start_date)->not->toBe((new \DateTime($seeds[$index]->start_date))->format('Y-m-d H:i:s'));
+        expect($event->start_date)->toBe((new \DateTime($event->start_date))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
     });
 });

@@ -33,9 +33,9 @@ class EventSeeder extends Seeder
                 } else {
                     // If the data includes a timezone attribute, convert the start_date and end_date to UTC from the given timezone.
                     if (isset($event['timezone'])) {
-                        $event['start_date'] = (new \DateTime($event['start_date'], new \DateTimeZone($event['timezone'])))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s');
+                        $event['start_date'] = (new \DateTime($event['start_date'], new \DateTimeZone($event['timezone'])))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
                         if (isset($event['end_date']) && $event['end_date']) {
-                            $event['end_date'] = (new \DateTime($event['end_date'], new \DateTimeZone($event['timezone'])))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s');
+                            $event['end_date'] = (new \DateTime($event['end_date'], new \DateTimeZone($event['timezone'])))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
                         }
                         unset($event['timezone']);
                     }

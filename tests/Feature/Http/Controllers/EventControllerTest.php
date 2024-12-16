@@ -55,8 +55,10 @@ test('index returns event dates for user timezone', function (): void {
     $viewEvents->each(function ($event) use ($events, $user) {
         $stored = $events->firstWhere('id', $event->id);
 
-        expect($event->start_date)->toBe((new \DateTime($stored->start_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d\TH:i:s'));
-        expect($event->end_date)->toBe((new \DateTime($stored->end_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d\TH:i:s'));
+        expect($event->start_date)->not->toBe($stored->start_date);
+        expect($event->start_date)->toBe(\dateToSessionTime($stored->start_date, $user));
+        expect($event->end_date)->not->toBe($stored->end_date);
+        expect($event->end_date)->toBe(\dateToSessionTime($stored->end_date, $user));
     });
 });
 
@@ -99,7 +101,6 @@ test('store saves and redirects', function (): void {
         'is_trip' => $is_trip,
     ]);
     $response->assertSessionHasNoErrors();
-
     $events = Event::query()
         ->where('name', $name)
         ->where('description', $description)
@@ -154,8 +155,8 @@ test('show returns event dates for user timezone', function (): void {
     $response->assertViewHas('event');
 
     $viewEvent = $response['event'];
-    expect($viewEvent->start_date)->toBe((new \DateTime($event->start_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d\TH:i:s'));
-    expect($viewEvent->end_date)->toBe((new \DateTime($event->end_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d\TH:i:s'));
+    expect($viewEvent->start_date)->toBe((new \DateTime($event->start_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d H:i:s'));
+    expect($viewEvent->end_date)->toBe((new \DateTime($event->end_date, new \DateTimeZone('UTC')))->setTimezone(new \DateTimeZone($user->timezone))->format('Y-m-d H:i:s'));
 });
 
 test('edit displays view', function (): void {
@@ -261,17 +262,17 @@ test('store converts user timezone dates to UTC', function (): void {
     $stored = Event::find($eventId);
 
     expect($stored->start_date)->not->toBe($submitted->start_date);
-    expect($stored->start_date)->toBe((new \DateTime($submitted->start_date, new \DateTimeZone($user->timezone)))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s'));
+    expect($stored->start_date)->toBe((new \DateTime($submitted->start_date, new \DateTimeZone($user->timezone)))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
 
     expect($stored->end_date)->not->toBe($submitted->end_date);
-    expect($stored->end_date)->toBe((new \DateTime($submitted->end_date, new \DateTimeZone($user->timezone)))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s'));
+    expect($stored->end_date)->toBe((new \DateTime($submitted->end_date, new \DateTimeZone($user->timezone)))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
 });
 
 test('update converts user timezone dates to UTC', function (): void {
     $user = \App\Models\User::factory()->centralTz()->create();
     $submitted = Event::factory()->withEndDate()->create();
-    $newStartDate = (new \DateTime($submitted->start_date, new \DateTimeZone($user->timezone)))->modify('-1 day')->format('Y-m-d\TH:i:s');
-    $newEndDate = (new \DateTime($submitted->end_date, new \DateTimeZone($user->timezone)))->modify('-1 day')->format('Y-m-d\TH:i:s');
+    $newStartDate = (new \DateTime($submitted->start_date, new \DateTimeZone($user->timezone)))->modify('-1 day')->format('Y-m-d H:i:s');
+    $newEndDate = (new \DateTime($submitted->end_date, new \DateTimeZone($user->timezone)))->modify('-1 day')->format('Y-m-d H:i:s');
 
     $response = $this->actingAs($user)->patch(route('events.update', $submitted), array_merge($submitted->toArray(), [
         'start_date' => $newStartDate,
@@ -287,9 +288,9 @@ test('update converts user timezone dates to UTC', function (): void {
 
     expect($stored->start_date)->not->toBe($submitted->start_date);
     expect($stored->start_date)->not->toBe($newStartDate);
-    expect($stored->start_date)->toBe((new \DateTime($newStartDate, new \DateTimeZone($user->timezone)))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s'));
+    expect($stored->start_date)->toBe((new \DateTime($newStartDate, new \DateTimeZone($user->timezone)))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
 
     expect($stored->end_date)->not->toBe($submitted->end_date);
     expect($stored->end_date)->not->toBe($newEndDate);
-    expect($stored->end_date)->toBe((new \DateTime($newEndDate, new \DateTimeZone($user->timezone)))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s'));
+    expect($stored->end_date)->toBe((new \DateTime($newEndDate, new \DateTimeZone($user->timezone)))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
 });

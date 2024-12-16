@@ -24,9 +24,9 @@ if (!function_exists('dateToSessionTime')) {
             return $utcDatetime;
         }
         if ($clientTimezoneOffset > 0) {
-            return (new \DateTime($utcDatetime))->modify('+' . $clientTimezoneOffset . ' minutes')->format('Y-m-d\TH:i:s');
+            return (new \DateTime($utcDatetime))->modify('+' . $clientTimezoneOffset . ' minutes')->format('Y-m-d H:i:s');
         }
-        return (new \DateTime($utcDatetime))->modify($clientTimezoneOffset . ' minutes')->format('Y-m-d\TH:i:s');
+        return (new \DateTime($utcDatetime))->modify($clientTimezoneOffset . ' minutes')->format('Y-m-d H:i:s');
     }
 }
 
@@ -50,8 +50,8 @@ if (!function_exists('dateFromSessionTime')) {
             return $sessionDatetime;
         }
         if ($clientTimezoneOffset > 0) {
-            return (new \DateTime($sessionDatetime))->modify('-' . $clientTimezoneOffset . ' minutes')->format('Y-m-d\TH:i:s');
+            return (new \DateTime($sessionDatetime))->modify('-' . $clientTimezoneOffset . ' minutes')->format('Y-m-d H:i:s');
         }
-        return (new \DateTime($sessionDatetime))->modify('+' . abs($clientTimezoneOffset) . ' minutes')->format('Y-m-d\TH:i:s');
+        return (new \DateTime($sessionDatetime))->modify('+' . abs($clientTimezoneOffset) . ' minutes')->format('Y-m-d H:i:s');
     }
 }
