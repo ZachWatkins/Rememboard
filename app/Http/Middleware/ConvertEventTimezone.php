@@ -18,10 +18,10 @@ class ConvertEventTimezone
         $requestMethod = $request->method();
         if ($requestMethod === 'POST' || $requestMethod === 'PUT' || $requestMethod === 'PATCH') {
             if ($request->has('start_date')) {
-                $request->merge(['start_date' => \dateFromSessionTime($request->input('start_date'))]);
+                $request->merge(['start_date' => \dateFromSessionTime($request->input('start_date'), $request->user())]);
             }
             if ($request->has('end_date')) {
-                $request->merge(['end_date' => \dateFromSessionTime($request->input('end_date'))]);
+                $request->merge(['end_date' => \dateFromSessionTime($request->input('end_date'), $request->user())]);
             }
         }
         return $next($request);
