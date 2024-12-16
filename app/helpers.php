@@ -11,13 +11,13 @@ if (!function_exists('dateToSessionTime')) {
      * @param string $utcDatetime
      * @return string
      */
-    function dateToSessionTime(?string $utcDatetime): string | null
+    function dateToSessionTime(?string $utcDatetime, ?\App\Models\User $user = null): string | null
     {
         if (!$utcDatetime) {
             return null;
         }
         $clientTimezoneOffset = session('timezoneOffset'); // minutes.
-        if (auth()->user?->timezone) {
+        if ($user?->timezone) {
             $clientTimezoneOffset = (new \DateTimeZone(auth()->user->timezone))->getOffset(new \DateTime()) / 60;
         }
         if ($clientTimezoneOffset === 0) {
