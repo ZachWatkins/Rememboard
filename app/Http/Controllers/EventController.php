@@ -18,9 +18,9 @@ class EventController extends Controller
 
         // If a user is logged in, convert the start_date and end_date to the user's timezone.
         if ($request->user()) {
-            $events->each(function ($event) {
-                $event->start_date = \dateToSessionTime($event->start_date);
-                $event->end_date = \dateToSessionTime($event->end_date);
+            $events->each(function ($event) use ($request) {
+                $event->start_date = \dateToSessionTime($event->start_date, $request->user());
+                $event->end_date = \dateToSessionTime($event->end_date, $request->user());
             });
         }
 
@@ -44,8 +44,8 @@ class EventController extends Controller
     public function show(Request $request, Event $event): View
     {
         if ($request->user()) {
-            $event->start_date = \dateToSessionTime($event->start_date);
-            $event->end_date = \dateToSessionTime($event->end_date);
+            $event->start_date = \dateToSessionTime($event->start_date, $request->user());
+            $event->end_date = \dateToSessionTime($event->end_date, $request->user());
         }
         return view('event.show', compact('event'));
     }
