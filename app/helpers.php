@@ -20,7 +20,7 @@ if (!function_exists('dateToSessionTime')) {
         if ($user?->timezone) {
             $clientTimezoneOffset = (new \DateTimeZone($user->timezone))->getOffset(new \DateTime()) / 60;
         }
-        if ($clientTimezoneOffset === 0) {
+        if ($clientTimezoneOffset === null || $clientTimezoneOffset === 0) {
             return $utcDatetime;
         }
         if ($clientTimezoneOffset > 0) {
@@ -46,7 +46,7 @@ if (!function_exists('dateFromSessionTime')) {
         if ($user?->timezone) {
             $clientTimezoneOffset = (new \DateTimeZone($user->timezone))->getOffset(new \DateTime()) / 60;
         }
-        if ($clientTimezoneOffset === 0) {
+        if ($clientTimezoneOffset === null || $clientTimezoneOffset === 0) {
             return $sessionDatetime;
         }
         if ($clientTimezoneOffset > 0) {
