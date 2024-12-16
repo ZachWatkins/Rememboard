@@ -37,14 +37,14 @@ if (!function_exists('dateFromSessionTime')) {
      * @param string $sessionDatetime
      * @return string
      */
-    function dateFromSessionTime(?string $sessionDatetime): string | null
+    function dateFromSessionTime(?string $sessionDatetime, ?\App\Models\User $user = null): string | null
     {
         if (!$sessionDatetime) {
             return null;
         }
         $clientTimezoneOffset = session('timezoneOffset'); // minutes.
-        if (auth()->user()?->timezone) {
-            $clientTimezoneOffset = (new \DateTimeZone(auth()->user->timezone))->getOffset(new \DateTime()) / 60;
+        if ($user?->timezone) {
+            $clientTimezoneOffset = (new \DateTimeZone($user->timezone))->getOffset(new \DateTime()) / 60;
         }
         if ($clientTimezoneOffset === 0) {
             return $sessionDatetime;
