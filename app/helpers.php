@@ -18,7 +18,7 @@ if (!function_exists('dateToSessionTime')) {
         }
         $clientTimezoneOffset = session('timezoneOffset'); // minutes.
         if ($user?->timezone) {
-            $clientTimezoneOffset = (new \DateTimeZone(auth()->user->timezone))->getOffset(new \DateTime()) / 60;
+            $clientTimezoneOffset = (new \DateTimeZone($user->timezone))->getOffset(new \DateTime()) / 60;
         }
         if ($clientTimezoneOffset === 0) {
             return $utcDatetime;
