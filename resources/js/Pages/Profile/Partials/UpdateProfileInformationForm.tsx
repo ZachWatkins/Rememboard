@@ -6,6 +6,8 @@ import { Transition } from "@headlessui/react";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 
+const timezones = Intl.supportedValuesOf("timeZone");
+
 export default function UpdateProfileInformation({
     mustVerifyEmail,
     status,
@@ -101,15 +103,20 @@ export default function UpdateProfileInformation({
                 <div>
                     <InputLabel htmlFor="timezone" value="Timezone" />
 
-                    <TextInput
+                    <select
                         id="timezone"
                         className="mt-1 block w-full"
                         value={data.timezone}
                         onChange={(e) => setData("timezone", e.target.value)}
                         required
-                        isFocused
-                        autoComplete="timezone"
-                    />
+                    >
+                        <option value="">Select a timezone...</option>
+                        {timezones.map((timezone) => (
+                            <option key={timezone} value={timezone}>
+                                {timezone}
+                            </option>
+                        ))}
+                    </select>
 
                     <InputError className="mt-2" message={errors.timezone} />
                 </div>
