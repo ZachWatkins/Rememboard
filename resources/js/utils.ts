@@ -9,3 +9,7 @@ export function formatServerTimestamp(value: string): string {
         timeZoneName: "short",
     });
 }
+
+export function setTimezoneOffsetHeader() {
+    window.axios.defaults.headers.common["X-Timezone-Offset"] = new Date().getTimezoneOffset() * -1;
+}
