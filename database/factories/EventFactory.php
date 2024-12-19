@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Event;
 
 class EventFactory extends Factory
@@ -20,12 +19,12 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-        $startDate = $this->faker->dateTime();
+        $startDate = $this->faker->dateTimeBetween('-5 years', '-1 year')->format('Y-m-d H:i:s');
         return [
             'name' => $this->faker->name(100),
             'description' => $this->faker->text(255),
             'start_date' => $startDate,
-            'end_date' => $this->faker->optional()->dateTimeBetween($startDate),
+            'end_date' => $this->faker->optional()->dateTimeBetween($startDate)?->format('Y-m-d H:i:s'),
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),
             'city' => $this->faker->city(),
@@ -36,55 +35,10 @@ class EventFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the event has a timezone of America/New_York.
-     */
-    public function eastern(): EventFactory
+    public function withEndDate(): static
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'timezone' => 'America/New_York',
-                'timezone_offset' => '-04:00',
-            ];
-        });
-    }
-
-    /**
-     * Indicate that the event has a timezone of America/Los_Angeles.
-     */
-    public function pacific(): EventFactory
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'timezone' => 'America/Los_Angeles',
-                'timezone_offset' => '-07:00',
-            ];
-        });
-    }
-
-    /**
-     * Indicate that the event has a timezone of America/Chicago.
-     */
-    public function central(): EventFactory
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'timezone' => 'America/Chicago',
-                'timezone_offset' => '-05:00',
-            ];
-        });
-    }
-
-    /**
-     * Indicate that the event has a timezone of America/Denver.
-     */
-    public function mountain(): EventFactory
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'timezone' => 'America/Denver',
-                'timezone_offset' => '-06:00',
-            ];
-        });
+        return $this->state(fn(array $attributes) => [
+            'end_date' => $this->faker->dateTimeBetween($attributes['start_date'])->format('Y-m-d H:i:s'),
+        ]);
     }
 }
