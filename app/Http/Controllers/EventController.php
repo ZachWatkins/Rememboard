@@ -9,10 +9,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class EventController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $events = Event::all();
 
@@ -22,7 +24,10 @@ class EventController extends Controller
             $event->end_date = \dateToSessionTime($event->end_date, $request->user());
         });
 
-        return view('event.index', compact('events'));
+        // return view('event.index', compact('events'));
+        return Inertia::render('Event/Index', [
+            'events' => $events,
+        ]);
     }
 
     public function create(Request $request): View
