@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EventStoreRequest;
-use App\Http\Requests\EventUpdateRequest;
-use App\Models\Event;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
+use App\Models\Event;
 use Inertia\Response;
+use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\EventStoreRequest;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\EventUpdateRequest;
 
 class EventController extends Controller
 {
@@ -24,15 +25,14 @@ class EventController extends Controller
             $event->end_date = \dateToSessionTime($event->end_date, $request->user());
         });
 
-        // return view('event.index', compact('events'));
         return Inertia::render('Event/Index', [
             'events' => $events,
         ]);
     }
 
-    public function create(Request $request): View
+    public function create(): Response
     {
-        return view('event.create');
+        return Inertia::render('Event/Create');
     }
 
     public function store(EventStoreRequest $request): RedirectResponse
@@ -41,7 +41,7 @@ class EventController extends Controller
 
         $request->session()->flash('event.id', $event->id);
 
-        return redirect()->route('events.index');
+        return Redirect::route('events.edit', $event);
     }
 
     public function show(Request $request, Event $event): View
