@@ -69,7 +69,9 @@ class EventController extends Controller
     {
         $validated = $request->validated();
         $validated['start_date'] = \dateFromSessionTime($validated['start_date'], $request->user());
-        $validated['end_date'] = \dateFromSessionTime($validated['end_date'], $request->user());
+        if (isset($validated['end_date'])) {
+            $validated['end_date'] = \dateFromSessionTime($validated['end_date'], $request->user());
+        }
         $event->update($validated);
 
         $request->session()->flash('event.id', $event->id);
