@@ -27,6 +27,6 @@ require __DIR__ . '/auth.php';
 
 Route::get('loudness', [App\Http\Controllers\LoudnessController::class, 'show'])->name('loudness.show');
 
-Route::resource('events', App\Http\Controllers\EventController::class)->middleware('event.timezone');
+Route::resource('events', App\Http\Controllers\EventController::class);
 Route::get('events/countdowns', [App\Http\Controllers\EventController::class, 'countdowns'])->name('events.countdowns');
 Route::get('events/trips', [App\Http\Controllers\EventController::class, 'trips'])->name('events.trips');
