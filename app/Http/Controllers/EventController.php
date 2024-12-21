@@ -39,12 +39,14 @@ class EventController extends Controller
     {
         $validated = $request->validated();
         $validated['start_date'] = \dateFromSessionTime($validated['start_date'], $request->user());
-        $validated['end_date'] = \dateFromSessionTime($validated['end_date'], $request->user());
+        if (isset($validated['end_date'])) {
+            $validated['end_date'] = \dateFromSessionTime($validated['end_date'], $request->user());
+        }
         $event = Event::create($validated);
 
         $request->session()->flash('event.id', $event->id);
 
-        return Redirect::route('events.edit', $event);
+        return redirect()->route('events.index');
     }
 
     public function show(Request $request, Event $event): Response
