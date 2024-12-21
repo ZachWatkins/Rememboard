@@ -37,28 +37,38 @@ class EventController extends Controller
 
     public function store(EventStoreRequest $request): RedirectResponse
     {
-        $event = Event::create($request->validated());
+        $validated = $request->validated();
+        $validated['start_date'] = \dateFromSessionTime($validated['start_date'], $request->user());
+        $validated['end_date'] = \dateFromSessionTime($validated['end_date'], $request->user());
+        $event = Event::create($validated);
 
         $request->session()->flash('event.id', $event->id);
 
         return Redirect::route('events.edit', $event);
     }
 
-    public function show(Request $request, Event $event): View
+    public function show(Request $request, Event $event): Response
     {
         $event->start_date = \dateToSessionTime($event->start_date, $request->user());
         $event->end_date = \dateToSessionTime($event->end_date, $request->user());
-        return view('event.show', compact('event'));
+        return Inertia::render('Event/Show', [
+            'event' => $event,
+        ]);
     }
 
-    public function edit(Request $request, Event $event): View
+    public function edit(Request $request, Event $event): Response
     {
-        return view('event.edit', compact('event'));
+        return Inertia::render('Event/Edit', [
+            'event' => $event,
+        ]);
     }
 
     public function update(EventUpdateRequest $request, Event $event): RedirectResponse
     {
-        $event->update($request->validated());
+        $validated = $request->validated();
+        $validated['start_date'] = \dateFromSessionTime($validated['start_date'], $request->user());
+        $validated['end_date'] = \dateFromSessionTime($validated['end_date'], $request->user());
+        $event->update($validated);
 
         $request->session()->flash('event.id', $event->id);
 
@@ -72,17 +82,29 @@ class EventController extends Controller
         return redirect()->route('events.index');
     }
 
-    public function countdowns(): View
+    public function countdowns(Request $request): Response
     {
         $events = Event::where('show_on_countdown', true)->orderBy('start_date')->get();
+        $events->each(function ($event) use ($request) {
+            $event->start_date = \dateToSessionTime($event->start_date, $request->user());
+            $event->end_date = \dateToSessionTime($event->end_date, $request->user());
+        });
 
-        return view('event.index', compact('events'));
+        return Inertia::render('Event/Countdowns', [
+            'events' => $events,
+        ]);
     }
 
-    public function trips(): JsonResponse
+    public function trips(Request $request): Response
     {
-        $trips = Event::where('is_trip', true)->get();
+        $events = Event::where('is_trip', true)->get();
+        $events->each(function ($event) use ($request) {
+            $event->start_date = \dateToSessionTime($event->start_date, $request->user());
+            $event->end_date = \dateToSessionTime($event->end_date, $request->user());
+        });
 
-        return response()->json($trips);
+        return Inertia::render('Event/Trips', [
+            'events' => $events,
+        ]);
     }
 }

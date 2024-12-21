@@ -1,5 +1,5 @@
 import { FormEventHandler } from "react";
-import { PageProps } from "@/types";
+import { Event as EventModel } from "@/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
 import InputError from "@/Components/InputError";
@@ -7,46 +7,40 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import DateInput from "@/Components/DateInput";
 import PrimaryButton from "@/Components/PrimaryButton";
+import DangerButton from "@/Components/DangerButton";
 
-export default function Create(props: PageProps) {
-    const { data, setData, post, processing, errors } = useForm({
-        name: "",
-        description: "",
-        start_date: "",
-        end_date: "",
-        latitude: "",
-        longitude: "",
-        city: "",
-        state: "",
-    });
+export default function Update({ event }: { event: EventModel }) {
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        delete: destroy,
+    } = useForm(event);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post("/events", {
-            onSuccess: () => {
-                setData({
-                    name: "",
-                    description: "",
-                    start_date: "",
-                    end_date: "",
-                    latitude: "",
-                    longitude: "",
-                    city: "",
-                    state: "",
-                });
-            },
+            preserveScroll: true,
         });
+    };
+    const submitDestroy: FormEventHandler = (e) => {
+        e.preventDefault();
+        if (confirm("Are you sure you want to delete this event?")) {
+            destroy("/events/" + data.id);
+        }
     };
 
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Create Event
+                    Update Event
                 </h2>
             }
         >
-            <Head title="Create Event" />
+            <Head title="Update Event" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -95,7 +89,7 @@ export default function Create(props: PageProps) {
                                 />
                                 <DateInput
                                     id="end_date"
-                                    value={data.end_date}
+                                    value={data.end_date || ""}
                                     onChange={(e) =>
                                         setData("end_date", e.target.value)
                                     }
@@ -108,9 +102,12 @@ export default function Create(props: PageProps) {
                                 />
                                 <TextInput
                                     id="latitude"
-                                    value={data.latitude}
+                                    value={data.latitude || ""}
                                     onChange={(e) =>
-                                        setData("latitude", e.target.value)
+                                        setData(
+                                            "latitude",
+                                            Number(e.target.value)
+                                        )
                                     }
                                 />
                                 <InputError message={errors.latitude} />
@@ -121,9 +118,12 @@ export default function Create(props: PageProps) {
                                 />
                                 <TextInput
                                     id="longitude"
-                                    value={data.longitude}
+                                    value={data.longitude || ""}
                                     onChange={(e) =>
-                                        setData("longitude", e.target.value)
+                                        setData(
+                                            "longitude",
+                                            Number(e.target.value)
+                                        )
                                     }
                                 />
                                 <InputError message={errors.longitude} />
@@ -131,7 +131,7 @@ export default function Create(props: PageProps) {
                                 <InputLabel value="City" htmlFor="city" />
                                 <TextInput
                                     id="city"
-                                    value={data.city}
+                                    value={data.city || ""}
                                     onChange={(e) =>
                                         setData("city", e.target.value)
                                     }
@@ -141,7 +141,7 @@ export default function Create(props: PageProps) {
                                 <InputLabel value="State" htmlFor="state" />
                                 <TextInput
                                     id="state"
-                                    value={data.state}
+                                    value={data.state || ""}
                                     onChange={(e) =>
                                         setData("state", e.target.value)
                                     }
@@ -154,6 +154,14 @@ export default function Create(props: PageProps) {
                                 >
                                     Create Event
                                 </PrimaryButton>
+                            </form>
+                            <form onSubmit={submitDestroy}>
+                                <DangerButton
+                                    className="mt-4"
+                                    disabled={processing}
+                                >
+                                    Delete Event
+                                </DangerButton>
                             </form>
                         </div>
                     </div>
