@@ -134,32 +134,53 @@ test('show returns event dates for user timezone', function (): void {
     $response->assertInertia(
         fn(Assert $page) => $page
             ->component('Event/Show')
-            ->has('event', fn (Assert $page) => $page
-                ->where('id', $event->id)
-                ->where('name', $event->name)
-                ->where('description', $event->description)
-                ->where('start_date', \dateToSessionTime($event->start_date, $user))
-                ->where('end_date', \dateToSessionTime($event->end_date, $user))
-                ->where('latitude', $event->latitude)
-                ->where('longitude', $event->longitude)
-                ->where('city', $event->city)
-                ->where('state', $event->state)
-                ->where('folder_name', $event->folder_name)
-                ->where('show_on_countdown', $event->show_on_countdown)
-                ->where('is_trip', $event->is_trip)
-                ->etc()
+            ->has(
+                'event',
+                fn(Assert $page) => $page
+                    ->where('id', $event->id)
+                    ->where('name', $event->name)
+                    ->where('description', $event->description)
+                    ->where('start_date', \dateToSessionTime($event->start_date, $user))
+                    ->where('end_date', \dateToSessionTime($event->end_date, $user))
+                    ->where('latitude', $event->latitude)
+                    ->where('longitude', $event->longitude)
+                    ->where('city', $event->city)
+                    ->where('state', $event->state)
+                    ->where('folder_name', $event->folder_name)
+                    ->where('show_on_countdown', $event->show_on_countdown)
+                    ->where('is_trip', $event->is_trip)
+                    ->etc()
             )
     );
 });
 
 test('edit displays view', function (): void {
+    $user = User::factory()->centralTz()->create();
     $event = Event::factory()->create();
 
-    $response = get(route('events.edit', $event));
-
+    $response = $this->actingAs($user)->get(route('events.edit', $event));
     $response->assertOk();
-    $response->assertViewIs('event.edit');
-    $response->assertViewHas('event');
+    $response->assertInertia(
+        fn(Assert $page) => $page
+            ->component('Event/Edit')
+            ->has(
+                'event',
+                fn(Assert $page) => $page
+                    ->where('id', $event->id)
+                    ->where('name', $event->name)
+                    ->where('description', $event->description)
+                    ->where('start_date', $event->start_date)
+                    ->where('end_date', $event->end_date)
+                    ->where('latitude', $event->latitude)
+                    ->where('longitude', $event->longitude)
+                    ->where('city', $event->city)
+                    ->where('state', $event->state)
+                    ->where('folder_name', $event->folder_name)
+                    ->where('show_on_countdown', $event->show_on_countdown)
+                    ->where('is_trip', $event->is_trip)
+                    ->etc()
+            )
+    );
 });
 
 test('update uses form request validation')
@@ -170,6 +191,7 @@ test('update uses form request validation')
     );
 
 test('update redirects', function (): void {
+    $user = User::factory()->centralTz()->create();
     $event = Event::factory()->create();
     $name = fake()->name();
     $description = fake()->text();
@@ -182,7 +204,7 @@ test('update redirects', function (): void {
     $show_on_countdown = fake()->boolean();
     $is_trip = fake()->boolean();
 
-    $response = put(route('events.update', $event), [
+    $response = $this->actingAs($user)->put(route('events.update', $event), [
         'name' => $name,
         'description' => $description,
         'start_date' => $start_date->toDateTimeString(),
@@ -202,7 +224,7 @@ test('update redirects', function (): void {
 
     expect($name)->toEqual($event->name);
     expect($description)->toEqual($event->description);
-    expect($start_date)->toEqual($event->start_date);
+    expect($start_date)->toEqual(\dateToSessionTime($event->start_date, $user));
     expect($latitude)->toEqual($event->latitude);
     expect($longitude)->toEqual($event->longitude);
     expect($city)->toEqual($event->city);
@@ -213,6 +235,7 @@ test('update redirects', function (): void {
 });
 
 test('destroy deletes and redirects', function (): void {
+    $user = User::factory()->centralTz()->create();
     $event = Event::factory()->create();
 
     $response = delete(route('events.destroy', $event));
@@ -223,13 +246,16 @@ test('destroy deletes and redirects', function (): void {
 });
 
 test('countdowns displays view', function (): void {
+    $user = User::factory()->centralTz()->create();
     $events = Event::factory()->count(3)->create();
 
-    $response = get(route('events.countdowns'));
-
+    $response = $this->actingAs($user)->get(route('events.countdowns'));
     $response->assertOk();
-    $response->assertViewIs('event.index');
-    $response->assertViewHas('events');
+    $response->assertInertia(
+        fn(Assert $page) => $page
+            ->component('Event/Countdowns')
+            ->has('events', 3)
+    );
 });
 
 test('trips responds with', function (): void {
