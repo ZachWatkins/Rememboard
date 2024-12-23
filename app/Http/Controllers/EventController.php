@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EventStoreRequest;
-use App\Http\Requests\EventUpdateRequest;
+use Inertia\Inertia;
 use App\Models\Event;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Inertia\Response;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\EventStoreRequest;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\EventUpdateRequest;
 
 class EventController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $events = Event::all();
 
@@ -22,38 +25,54 @@ class EventController extends Controller
             $event->end_date = \dateToSessionTime($event->end_date, $request->user());
         });
 
-        return view('event.index', compact('events'));
+        return Inertia::render('Event/Index', [
+            'events' => $events,
+        ]);
     }
 
-    public function create(Request $request): View
+    public function create(): Response
     {
-        return view('event.create');
+        return Inertia::render('Event/Create');
     }
 
     public function store(EventStoreRequest $request): RedirectResponse
     {
-        $event = Event::create($request->validated());
+        $validated = $request->validated();
+        $validated['start_date'] = \dateFromSessionTime($validated['start_date'], $request->user());
+        if (isset($validated['end_date'])) {
+            $validated['end_date'] = \dateFromSessionTime($validated['end_date'], $request->user());
+        }
+        $event = Event::create($validated);
 
         $request->session()->flash('event.id', $event->id);
 
         return redirect()->route('events.index');
     }
 
-    public function show(Request $request, Event $event): View
+    public function show(Request $request, Event $event): Response
     {
         $event->start_date = \dateToSessionTime($event->start_date, $request->user());
         $event->end_date = \dateToSessionTime($event->end_date, $request->user());
-        return view('event.show', compact('event'));
+        return Inertia::render('Event/Show', [
+            'event' => $event,
+        ]);
     }
 
-    public function edit(Request $request, Event $event): View
+    public function edit(Request $request, Event $event): Response
     {
-        return view('event.edit', compact('event'));
+        return Inertia::render('Event/Edit', [
+            'event' => $event,
+        ]);
     }
 
     public function update(EventUpdateRequest $request, Event $event): RedirectResponse
     {
-        $event->update($request->validated());
+        $validated = $request->validated();
+        $validated['start_date'] = \dateFromSessionTime($validated['start_date'], $request->user());
+        if (isset($validated['end_date'])) {
+            $validated['end_date'] = \dateFromSessionTime($validated['end_date'], $request->user());
+        }
+        $event->update($validated);
 
         $request->session()->flash('event.id', $event->id);
 
@@ -67,17 +86,29 @@ class EventController extends Controller
         return redirect()->route('events.index');
     }
 
-    public function countdowns(): View
+    public function countdowns(Request $request): Response
     {
         $events = Event::where('show_on_countdown', true)->orderBy('start_date')->get();
+        $events->each(function ($event) use ($request) {
+            $event->start_date = \dateToSessionTime($event->start_date, $request->user());
+            $event->end_date = \dateToSessionTime($event->end_date, $request->user());
+        });
 
-        return view('event.index', compact('events'));
+        return Inertia::render('Event/Countdowns', [
+            'events' => $events,
+        ]);
     }
 
-    public function trips(): JsonResponse
+    public function trips(Request $request): Response
     {
-        $trips = Event::where('is_trip', true)->get();
+        $events = Event::where('is_trip', true)->get();
+        $events->each(function ($event) use ($request) {
+            $event->start_date = \dateToSessionTime($event->start_date, $request->user());
+            $event->end_date = \dateToSessionTime($event->end_date, $request->user());
+        });
 
-        return response()->json($trips);
+        return Inertia::render('Event/Trips', [
+            'events' => $events,
+        ]);
     }
 }

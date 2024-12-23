@@ -15,7 +15,7 @@ export type PageProps<
 };
 
 export interface Event {
-    id: number;
+    id?: number;
     name: string;
     description: string;
     start_date: string;
@@ -24,5 +24,5 @@ export interface Event {
     longitude: number | null;
     city: string | null;
     state: string | null;
-    countdown: string;
+    countdown?: string;
 }
