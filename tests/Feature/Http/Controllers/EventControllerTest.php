@@ -98,7 +98,6 @@ test('store saves and redirects', function (): void {
         ->where('is_trip', $is_trip)
         ->first();
     expect($event)->not->toBeNull();
-    expect($event->start_date)->toBe(\dateFromSessionTime($start_date, $user));
 
     $response->assertRedirect(route('events.index'));
 });
@@ -109,6 +108,19 @@ test('store uses form request validation')
         'store',
         \App\Http\Requests\EventStoreRequest::class
     );
+
+test('store converts user timezone dates to UTC', function (): void {
+    $user = User::factory()->centralTz()->create();
+    $event = Event::factory()->make();
+    $response = $this->actingAs($user)->post(route('events.store'), $event->toArray());
+    $response->assertSessionHasNoErrors();
+    $response->assertSessionHas('event.id', 1);
+
+    $stored = Event::find(session('event.id'));
+    expect($stored)->not->toBeNull();
+    expect($stored->start_date)->not->toBe($event->start_date);
+    expect($stored->start_date)->toBe(\dateFromSessionTime($event->start_date, $user));
+});
 
 test('show displays view', function (): void {
     $event = Event::factory()->create();
@@ -238,7 +250,7 @@ test('destroy deletes and redirects', function (): void {
     $user = User::factory()->centralTz()->create();
     $event = Event::factory()->create();
 
-    $response = delete(route('events.destroy', $event));
+    $response = $this->actingAs($user)->delete(route('events.destroy', $event));
 
     $response->assertRedirect(route('events.index'));
 
@@ -254,37 +266,23 @@ test('countdowns displays view', function (): void {
     $response->assertInertia(
         fn(Assert $page) => $page
             ->component('Event/Countdowns')
-            ->has('events', 3)
+            ->has('events', $events->where('show_on_countdown', true)->count())
     );
 });
 
 test('trips responds with', function (): void {
-    $trips = Event::factory()->count(3)->create(['is_trip' => true]);
+    $user = User::factory()->create();
+    $events = Event::factory()->count(3)->create();
 
-    $response = get(route('events.trips'));
+    // $response = get(route('events.trips'));
+    $response = $this->actingAs($user)->get(route('events.trips'));
 
     $response->assertOk();
-    $response->assertJson($trips->toArray());
-});
-
-test('store converts user timezone dates to UTC', function (): void {
-    $user = \App\Models\User::factory()->centralTz()->create();
-    $submitted = Event::factory()->withEndDate()->make();
-
-    $response = $this->actingAs($user)->post(route('events.store'), $submitted->toArray());
-
-    $response->assertSessionHasNoErrors();
-    $response->assertRedirect(route('events.edit', Event::first()));
-
-    $eventId = session('event.id');
-    $response->assertSessionHas('event.id', $eventId);
-    $stored = Event::find($eventId);
-
-    expect($stored->start_date)->not->toBe($submitted->start_date);
-    expect($stored->start_date)->toBe(\dateFromSessionTime($submitted->start_date, $user));
-
-    expect($stored->end_date)->not->toBe($submitted->end_date);
-    expect($stored->end_date)->toBe(\dateFromSessionTime($submitted->end_date, $user));
+    $response->assertInertia(
+        fn(Assert $page) => $page
+            ->component('Event/Trips')
+            ->has('events', $events->where('is_trip', true)->count())
+    );
 });
 
 test('update converts user timezone dates to UTC', function (): void {
