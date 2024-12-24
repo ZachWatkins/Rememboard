@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('end_date')->nullable();
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
+            $table->string('address', 255)->nullable();
             $table->string('city', 100)->nullable();
             $table->string('state', 100)->nullable();
             $table->string('folder_name', 255)->nullable();
