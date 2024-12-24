@@ -9,7 +9,7 @@ use Inertia\Response;
 
 class EventImportController extends Controller
 {
-    public function import(): Response
+    public function show(): Response
     {
         return Inertia::render('Event/Import');
     }
