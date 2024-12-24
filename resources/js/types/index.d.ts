@@ -22,6 +22,7 @@ export interface Event {
     end_date: string | null;
     latitude: number | null;
     longitude: number | null;
+    address: string | null;
     city: string | null;
     state: string | null;
     countdown?: string;

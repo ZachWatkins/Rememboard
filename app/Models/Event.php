@@ -21,6 +21,7 @@ class Event extends Model
         'end_date',
         'latitude',
         'longitude',
+        'address',
         'city',
         'state',
         'folder_name',
