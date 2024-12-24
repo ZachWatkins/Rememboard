@@ -29,3 +29,10 @@ controllers:
     trips:
       query: where:is_trip:true order:start_date
       respond: trips
+  EventImportController:
+    show:
+      render: inertia.event-import
+    upload:
+      validate: required|file|mimes:ics
+      store: temp
+      redirect: show
