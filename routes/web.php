@@ -9,7 +9,7 @@ Route::get('/', function () {
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'now' => now(),
-        'events' => \App\Models\Event::where('show_on_countdown', true)->get(),
+        'events' => \App\Models\Event::all(),
     ]);
 });
 
