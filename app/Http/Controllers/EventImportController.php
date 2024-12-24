@@ -17,7 +17,7 @@ class EventImportController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:ical,txt',
+            'file' => 'required|file|mimes:ics',
         ]);
 
         $path = $request->file('file')->store('temp');
