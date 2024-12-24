@@ -7,12 +7,14 @@ use App\Models\Event;
 
 test('can upload .ics files', function () {
     $user = User::factory()->centralTz()->create();
-    $fixture = base_path('tests/fixtures/event.ics');
+    $fixture = base_path('tests/fixtures/events.ics');
     $name = 'temp.ics';
     $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name;
     copy($fixture, $path);
     $file = new \Illuminate\Http\UploadedFile($path, $name, 'text/calendar', null, true);
+
     $response = $this->actingAs($user)->post('/events/import', ['file' => $file]);
+
     $response->assertRedirect();
     $response->assertSessionHas('events');
     $events = $response->session()->get('events');
