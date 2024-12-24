@@ -26,6 +26,7 @@ class EventStoreRequest extends FormRequest
             'end_date' => ['nullable'],
             'latitude' => ['required', 'numeric', 'between:-99.99999999,99.99999999'],
             'longitude' => ['required', 'numeric', 'between:-999.99999999,999.99999999'],
+            'address' => ['required', 'string'],
             'city' => ['required', 'string'],
             'state' => ['required', 'string'],
             'folder_name' => ['required', 'string', 'max:255'],
