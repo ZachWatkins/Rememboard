@@ -66,6 +66,7 @@ test('store saves and redirects', function (): void {
     $start_date = Carbon::parse(fake()->dateTime());
     $latitude = fake()->latitude();
     $longitude = fake()->longitude();
+    $address = fake()->address();
     $city = fake()->city();
     $state = 'Texas';
     $folder_name = fake()->word();
@@ -77,6 +78,7 @@ test('store saves and redirects', function (): void {
         'start_date' => $start_date->toDateTimeString(),
         'latitude' => $latitude,
         'longitude' => $longitude,
+        'address' => $address,
         'city' => $city,
         'state' => $state,
         'folder_name' => $folder_name,
@@ -91,6 +93,7 @@ test('store saves and redirects', function (): void {
         ->where('description', $description)
         ->where('latitude', $latitude)
         ->where('longitude', $longitude)
+        ->where('address', $address)
         ->where('city', $city)
         ->where('state', $state)
         ->where('folder_name', $folder_name)
@@ -156,6 +159,7 @@ test('show returns event dates for user timezone', function (): void {
                     ->where('end_date', \dateToSessionTime($event->end_date, $user))
                     ->where('latitude', $event->latitude)
                     ->where('longitude', $event->longitude)
+                    ->where('address', $event->address)
                     ->where('city', $event->city)
                     ->where('state', $event->state)
                     ->where('folder_name', $event->folder_name)
@@ -185,6 +189,7 @@ test('edit displays view', function (): void {
                     ->where('end_date', $event->end_date)
                     ->where('latitude', $event->latitude)
                     ->where('longitude', $event->longitude)
+                    ->where('address', $event->address)
                     ->where('city', $event->city)
                     ->where('state', $event->state)
                     ->where('folder_name', $event->folder_name)
@@ -210,6 +215,7 @@ test('update redirects', function (): void {
     $start_date = Carbon::parse(fake()->dateTime());
     $latitude = fake()->latitude();
     $longitude = fake()->longitude();
+    $address = fake()->address();
     $city = fake()->city();
     $state = 'Texas';
     $folder_name = fake()->word();
@@ -222,6 +228,7 @@ test('update redirects', function (): void {
         'start_date' => $start_date->toDateTimeString(),
         'latitude' => $latitude,
         'longitude' => $longitude,
+        'address' => $address,
         'city' => $city,
         'state' => $state,
         'folder_name' => $folder_name,
@@ -239,6 +246,7 @@ test('update redirects', function (): void {
     expect($start_date)->toEqual(\dateToSessionTime($event->start_date, $user));
     expect($latitude)->toEqual($event->latitude);
     expect($longitude)->toEqual($event->longitude);
+    expect($address)->toEqual($event->address);
     expect($city)->toEqual($event->city);
     expect($state)->toEqual($event->state);
     expect($folder_name)->toEqual($event->folder_name);

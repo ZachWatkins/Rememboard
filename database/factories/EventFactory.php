@@ -27,6 +27,7 @@ class EventFactory extends Factory
             'end_date' => $this->faker->optional()->dateTimeBetween($startDate)?->format('Y-m-d H:i:s'),
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),
+            'address' => $this->faker->address(),
             'city' => $this->faker->city(),
             'state' => $this->faker->text(100),
             'folder_name' => $this->faker->regexify('[A-Za-z0-9]{255}'),
