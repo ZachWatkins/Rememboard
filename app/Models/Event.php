@@ -45,6 +45,9 @@ class Event extends Model
 
     public function getCountdownAttribute()
     {
+        if ((new \Carbon\Carbon($this->start_date))->isPast()) {
+            return null;
+        }
         return (new \Carbon\Carbon($this->start_date))->diffForHumans(now(), \Carbon\CarbonInterface::DIFF_ABSOLUTE, true, 6);
     }
 }

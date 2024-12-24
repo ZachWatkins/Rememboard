@@ -2,6 +2,7 @@ import { PageProps, Event } from "@/types";
 import { Head, Link } from "@inertiajs/react";
 import { formatServerTimestamp } from "@/utils";
 import EventCard from "@/Pages/Event/Partials/EventCard";
+import Map from "@/Pages/Partials/Map";
 
 export default function Welcome({
     auth,
@@ -69,11 +70,37 @@ export default function Welcome({
                     </header>
 
                     <main className="mt-6 relative w-full max-w-2xl px-6 lg:max-w-7xl mt-auto mb-auto">
-                        <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+                        <h2 className="text-2xl font-bold text-center">
+                            Upcoming Events
+                        </h2>
+                        <div className="grid gap-6 lg:grid-cols-2 lg:gap-8 mt-6">
                             {/* List of events with days, minutes, and seconds until the event. */}
                             {events &&
-                                events.map((event) => <EventCard event={event} />)}
+                                events
+                                    .filter((event) => event.countdown)
+                                    .map((event, i) => (
+                                        <EventCard key={i} event={event} />
+                                    ))}
                         </div>
+                        <h2 className="text-2xl font-bold text-center mt-6">
+                            Family Trips
+                        </h2>
+                        {events &&
+                            events.filter(
+                                (event) =>
+                                    event.latitude &&
+                                    event.longitude &&
+                                    !event.countdown
+                            ).length > 0 && (
+                                <Map
+                                    events={events.filter(
+                                        (event) =>
+                                            event.latitude &&
+                                            event.longitude &&
+                                            !event.countdown
+                                    )}
+                                />
+                            )}
                     </main>
 
                     <footer className="py-16 text-center text-sm text-black dark:text-white/70">
