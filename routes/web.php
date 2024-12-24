@@ -30,5 +30,7 @@ Route::get('loudness', [App\Http\Controllers\LoudnessController::class, 'show'])
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('events/countdowns', [App\Http\Controllers\EventController::class, 'countdowns'])->name('events.countdowns');
     Route::get('events/trips', [App\Http\Controllers\EventController::class, 'trips'])->name('events.trips');
+    Route::get('events/import', [App\Http\Controllers\EventImportController::class, 'import'])->name('events.import');
+    Route::post('events/import', [App\Http\Controllers\EventImportController::class, 'upload'])->name('events.upload');
     Route::resource('events', App\Http\Controllers\EventController::class);
 });
