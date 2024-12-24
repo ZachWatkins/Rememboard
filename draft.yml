@@ -6,6 +6,7 @@ models:
     end_date: datetime nullable
     latitude: decimal:10,8 nullable
     longitude: decimal:11,8 nullable
+    address: string:255 nullable
     city: string:100 nullable
     state: string:100 nullable
     folder_name: string:255 nullable
