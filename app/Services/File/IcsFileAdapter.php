@@ -22,10 +22,19 @@ class IcsFileAdapter
         if (!file_exists($path)) {
             throw new \InvalidArgumentException('File does not exist');
         }
-        $vcalendar = VObject\Reader::read(fopen($path, 'r'), VObject\Reader::OPTION_FORGIVING);
-        dd($vcalendar);
 
-        $events = collect();
+        $vcalendar = VObject\Reader::read(fopen($path, 'r'), VObject\Reader::OPTION_FORGIVING);
+
+        $events = collect($vcalendar->VEVENT)
+            ->map(function (VObject\Component\VEvent $vevent) {
+                $event = new Event();
+                $event->name = $vevent->SUMMARY->getValue();
+                $event->description = $vevent->DESCRIPTION?->getValue() ?? '';
+                $event->start_date = $vevent->DTSTART->getDateTime()->format('Y-m-d H:i:s');
+                $event->end_date = $vevent->DTEND->getDateTime()->format('Y-m-d H:i:s');
+                $event->address = $vevent->LOCATION?->getValue() ?? '';
+                return $event;
+            });
 
         return $events;
     }
