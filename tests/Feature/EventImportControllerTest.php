@@ -22,4 +22,5 @@ test('can upload .ics files', function () {
     expect($events->first()->name)->toBe('Test Event');
     expect($events->first()->start_date)->toBe((new \DateTime('2021-01-01 00:00:00', new \DateTimeZone('America/Chicago')))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
     expect($events->first()->end_date)->toBe((new \DateTime('2021-01-01 01:00:00', new \DateTimeZone('America/Chicago')))->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s'));
+    expect($events->first()->address)->toBe('123 Main St');
 });
