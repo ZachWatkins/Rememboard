@@ -14,15 +14,19 @@ class IcsFileAdapter
     public function getEvents(string $path): \Generator
     {
         if ('ics' !== pathinfo($path, PATHINFO_EXTENSION)) {
-            throw new \InvalidArgumentException('File must be a .ics file');
+            throw new \InvalidArgumentException('File must be a .ics file: ' . $path);
         }
 
-        $path = storage_path('app/private/' . $path);
-        if (!file_exists($path)) {
-            throw new \InvalidArgumentException('File does not exist');
+        $realpath = storage_path('app/private/' . $path);
+        if (!file_exists($realpath)) {
+            $paths = glob($realpath);
+            if (!$paths) {
+                throw new \InvalidArgumentException('File does not exist: ' . $path);
+            }
+            $realpath = $paths[0];
         }
 
-        $vcalendar = VObject\Reader::read(fopen($path, 'r'), VObject\Reader::OPTION_FORGIVING);
+        $vcalendar = VObject\Reader::read(fopen($realpath, 'r'), VObject\Reader::OPTION_FORGIVING);
         $names = [];
 
         foreach ($vcalendar->VEVENT as $vevent) {
@@ -35,6 +39,9 @@ class IcsFileAdapter
                 $event->start_date = $vevent->DTSTART->getDateTime()->format('Y-m-d H:i:s');
                 $event->end_date = $vevent->DTEND->getDateTime()->format('Y-m-d H:i:s');
                 $event->address = $vevent->LOCATION?->getValue() ?? '';
+                if ($event->address) {
+                    $event->is_trip = true;
+                }
                 yield $event;
             }
         }
