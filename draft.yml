@@ -12,6 +12,12 @@ models:
     folder_name: string:255 nullable
     show_on_countdown: boolean default:false
     is_trip: boolean default:false
+    relationships:
+      belongsToMany: Participant
+  Participant:
+    name: string:100 unique
+    relationships:
+      hasMany: Event
   Chore:
     name: string:100
     description: string:255

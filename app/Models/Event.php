@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Event extends Model
 {
@@ -50,5 +51,10 @@ class Event extends Model
             return null;
         }
         return (new \Carbon\Carbon($this->start_date))->diffForHumans(now(), \Carbon\CarbonInterface::DIFF_ABSOLUTE, true, 6);
+    }
+
+    public function participants(): BelongsToMany
+    {
+        return $this->belongsToMany(Participant::class);
     }
 }
