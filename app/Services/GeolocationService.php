@@ -24,7 +24,6 @@ class GeolocationService
             if ($response->successful()) {
 
                 $data = $response->json();
-                dd($data);
                 if (!empty($data['results'])) {
                     $position = $data['results'][0]['position'];
                     return [
