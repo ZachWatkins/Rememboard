@@ -37,7 +37,7 @@ class IcsFileAdapter
                 $event->name = $name;
                 $event->description = $vevent->DESCRIPTION?->getValue() ?? '';
                 $event->start_date = $vevent->DTSTART->getDateTime()->format('Y-m-d H:i:s');
-                $event->end_date = $vevent->DTEND->getDateTime()->format('Y-m-d H:i:s');
+                $event->end_date = $vevent->DTEND?->getDateTime()->format('Y-m-d H:i:s') ?? null;
                 $event->address = $vevent->LOCATION?->getValue() ?? '';
                 if ($event->address) {
                     $event->is_trip = true;
