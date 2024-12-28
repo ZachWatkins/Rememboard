@@ -20,24 +20,23 @@ class EventImportController extends Controller
     {
         $request->validate([
             'file' => 'required|file|mimes:ics',
+            'request_coordinates' => 'boolean',
         ]);
 
         $path = $request->file('file')->store('temp');
 
-        $events = $adapter->getEvents($path);
-        foreach ($events as $event) {
-            $coordinates = $geolocationService->getCoordinates($event->address);
-            try {
-                if ($coordinates) {
-                    $event->latitude = $coordinates['latitude'];
-                    $event->longitude = $coordinates['longitude'];
-                }
-                $event->save();
-            } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error($e->getMessage());
+        $count = 0;
+
+        foreach ($adapter->getEvents($path) as $event) {
+            if (true === $request->input('request_coordinates') && $event->address) {
+                $coords = $geolocationService->getCoordinates($event->address);
+                $event->latitude = $coords['latitude'];
+                $event->longitude = $coords['longitude'];
             }
+            $event->save();
+            $count++;
         }
 
-        return redirect()->back()->with('events', $events);
+        return redirect()->back()->with('count_imported', $count);
     }
 }
