@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Event;
+use App\Models\Participant;
 use App\Services\GeolocationService;
 use Illuminate\Foundation\Inspiring;
 use App\Services\File\IcsFileAdapter;
@@ -16,18 +17,20 @@ Artisan::command('import:events', function (IcsFileAdapter $adapter, Geolocation
     $requestCoordinates = 'y' === strtolower($this->ask('Fetch coordinates from the geocoding service? Y/n'));
     $promptEachEvent = 'y' === strtolower($this->ask('Select which events to import? Y/n'));
 
-    $count = 0;
-
+    $skipped = 0;
+    $duplicates = 0;
+    $ids = [];
     foreach ($adapter->getEvents($path) as $event) {
         if (Event::where('name', $event->name)->exists()) {
-            $this->comment("Skipping duplicate event {$event->name}.");
+            $duplicates++;
             continue;
         }
         if ($tripsOnly && !$event->address) {
-            $this->comment('Skipping non-trip event.');
+            $skipped++;
             continue;
         }
         if ($promptEachEvent && 'y' !== strtolower($this->ask("Import \"{$event->name}\"? Y/n"))) {
+            $skipped++;
             continue;
         }
         if ($tripsOnly || 'y' === strtolower($this->ask("Is the event {$event->name} a trip? Y/n"))) {
@@ -39,8 +42,23 @@ Artisan::command('import:events', function (IcsFileAdapter $adapter, Geolocation
             $event->longitude = $coords['longitude'];
         }
         $event->save();
-        $count++;
+        $ids[] = $event->id;
     }
 
-    $this->comment("Imported {$count} events.");
+    $this->comment("Skipped {$duplicates} duplicate events, {$skipped} other events.");
+    $this->comment('Imported ' . count($ids) . ' events.');
+
+    if ('y' !== strtolower($this->ask('Assign participants? Y/n'))) {
+        return;
+    }
+
+    $participants = Participant::all();
+
+    foreach ($ids as $id) {
+        $event = Event::find($id);
+        $this->comment($event);
+        $this->comment($participants);
+        $participants = explode(',', $this->ask("Participant IDs (<id1>,<id2>)"), $participants->count());
+        $event->participants()->attach(array_map('intval', $participants));
+    }
 })->purpose('Import events from an ICS file');
