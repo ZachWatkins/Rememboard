@@ -9,7 +9,7 @@ use App\Services\GeolocationService;
 use App\Services\File\IcsFileAdapter;
 use App\Services\AddressParsingService;
 
-class ImportEventsCommand extends Command
+class EventImportCommand extends Command
 {
     /**
      * The name and signature of the console command.
