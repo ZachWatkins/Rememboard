@@ -57,7 +57,7 @@ Artisan::command('import:events', function (IcsFileAdapter $adapter, Geolocation
     foreach ($ids as $id) {
         $event = Event::find($id);
         $this->comment($event);
-        $this->comment($participants);
+        $this->comment($participants->only(['id', 'name']));
         $participants = explode(',', $this->ask("Participant IDs (<id1>,<id2>)"), $participants->count());
         $event->participants()->attach(array_map('intval', $participants));
     }
