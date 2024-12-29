@@ -25,6 +25,8 @@ class Event extends Model
         'address',
         'city',
         'state',
+        'zip',
+        'country',
         'folder_name',
         'show_on_countdown',
         'is_trip',
