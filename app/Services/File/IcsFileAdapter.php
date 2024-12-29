@@ -2,8 +2,9 @@
 
 namespace App\Services\File;
 
-use App\Models\Event;
 use Sabre\VObject;
+use App\Models\Event;
+use App\Services\AddressParsingService;
 
 class IcsFileAdapter
 {
@@ -11,7 +12,7 @@ class IcsFileAdapter
      * Get events from a .ics file.
      * @param string $path Path to a file in app/private.
      */
-    public function getEvents(string $path): \Generator
+    public function getEvents(string $path, AddressParsingService $addressParser): \Generator
     {
         if ('ics' !== pathinfo($path, PATHINFO_EXTENSION)) {
             throw new \InvalidArgumentException('File must be a .ics file: ' . $path);
@@ -42,6 +43,7 @@ class IcsFileAdapter
                 if ($event->address) {
                     $event->is_trip = true;
                 }
+                $event->country = $addressParser->getCountry($event->address);
                 yield $event;
             }
         }

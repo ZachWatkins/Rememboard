@@ -7,6 +7,7 @@ use App\Models\Participant;
 use Illuminate\Console\Command;
 use App\Services\GeolocationService;
 use App\Services\File\IcsFileAdapter;
+use App\Services\AddressParsingService;
 
 class ImportEventsCommand extends Command
 {
@@ -27,7 +28,7 @@ class ImportEventsCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(IcsFileAdapter $adapter, GeolocationService $geolocationService)
+    public function handle(IcsFileAdapter $adapter, GeolocationService $geolocationService, AddressParsingService $addressParser)
     {
         $path = $this->ask('Enter the path or pattern for the ICS file in app/private');
         $tripsOnly = 'y' === strtolower($this->ask('Only import events with addresses and mark them as trips? Y/n'));
@@ -37,7 +38,7 @@ class ImportEventsCommand extends Command
         $skipped = 0;
         $duplicates = 0;
         $ids = [];
-        foreach ($adapter->getEvents($path) as $event) {
+        foreach ($adapter->getEvents($path, $addressParser) as $event) {
             if (Event::where('name', $event->name)->exists()) {
                 $duplicates++;
                 continue;

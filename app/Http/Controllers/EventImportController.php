@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\GeolocationService;
 use App\Services\File\IcsFileAdapter;
 use Illuminate\Http\RedirectResponse;
+use App\Services\AddressParsingService;
 
 class EventImportController extends Controller
 {
@@ -16,7 +17,7 @@ class EventImportController extends Controller
         return Inertia::render('Event/Import');
     }
 
-    public function upload(Request $request, IcsFileAdapter $adapter, GeolocationService $geolocationService): RedirectResponse
+    public function upload(Request $request, IcsFileAdapter $adapter, GeolocationService $geolocationService, AddressParsingService $addressParser): RedirectResponse
     {
         $request->validate([
             'file' => 'required|file|mimes:ics',
@@ -27,7 +28,7 @@ class EventImportController extends Controller
 
         $count = 0;
 
-        foreach ($adapter->getEvents($path) as $event) {
+        foreach ($adapter->getEvents($path, $addressParser) as $event) {
             if (true === $request->input('request_coordinates') && $event->address) {
                 $coords = $geolocationService->getCoordinates($event->address);
                 $event->latitude = $coords['latitude'];
