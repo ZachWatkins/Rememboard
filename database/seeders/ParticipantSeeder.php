@@ -13,15 +13,19 @@ class ParticipantSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(string $path = ''): void
+    public function run(?string $path = null): void
     {
-        if (!$path) {
-            $path = database_path('seeders' . DIRECTORY_SEPARATOR . 'participants*.json');
-        }
-        $matches = glob($path);
-        if (empty($matches)) {
-            $this->command?->error('File not found: ' . $path);
-            return;
+        if (null === $path) {
+            $matches = glob(database_path('seeders' . DIRECTORY_SEPARATOR . 'participants*.json'));
+            if (empty($matches)) {
+                return;
+            }
+        } else {
+            $matches = glob($path);
+            if (empty($matches)) {
+                $this->command?->comment('File not found: ' . $path);
+                return;
+            }
         }
         foreach ($matches as $path) {
             $items = json_decode(\file_get_contents($path), true);
