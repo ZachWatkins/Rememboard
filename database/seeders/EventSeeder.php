@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Event;
+use App\Models\Participant;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -15,14 +16,19 @@ class EventSeeder extends Seeder
      */
     public function run(string $path = ''): void
     {
-        if (!$path) {
-            $path = database_path('seeders' . DIRECTORY_SEPARATOR . 'events*.json');
+        if (null === $path) {
+            $matches = glob(database_path('seeders' . DIRECTORY_SEPARATOR . 'events.json'));
+            if (empty($matches)) {
+                return;
+            }
+        } else {
+            $matches = glob($path);
+            if (empty($matches)) {
+                $this->command?->comment('File not found: ' . $path);
+                return;
+            }
         }
-        $matches = glob($path);
-        if (empty($matches)) {
-            $this->command?->error('File not found: ' . $path);
-            return;
-        }
+        $participants = Participant::all();
         foreach ($matches as $path) {
             $events = json_decode(\file_get_contents($path), true);
             $skipped = 0;
@@ -39,7 +45,10 @@ class EventSeeder extends Seeder
                         }
                         unset($event['timezone']);
                     }
-                    Event::create($event);
+                    $newEvent = Event::create($event);
+                    if (isset($event['participants'])) {
+                        $newEvent->participants()->sync($participants->whereIn('name', $event['participants'])->pluck('id'));
+                    }
                     $created++;
                 }
             }
