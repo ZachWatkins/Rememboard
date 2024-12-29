@@ -33,6 +33,8 @@ class ExportEventSeedsCommand extends Command
             $item['participants'] = $event->participants->pluck('name');
             unset($item['id']);
             unset($item['countdown']);
+            unset($item['created_at']);
+            unset($item['updated_at']);
             return $item;
         })->toArray();
         $contents = json_encode(array_values($events), JSON_PRETTY_PRINT);
