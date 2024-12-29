@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\GeolocationService;
 use Illuminate\Support\Facades\Vite;
+use App\Services\AddressParsingService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,6 +16,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(GeolocationService::class, function () {
             return new GeolocationService();
+        });
+        $this->app->singleton(AddressParsingService::class, function () {
+            return new AddressParsingService();
         });
     }
 
