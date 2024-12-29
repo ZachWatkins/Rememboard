@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Event;
+use App\Models\Participant;
 use Illuminate\Console\Command;
 use App\Services\GeolocationService;
 use App\Services\File\IcsFileAdapter;
