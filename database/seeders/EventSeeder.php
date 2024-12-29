@@ -45,10 +45,11 @@ class EventSeeder extends Seeder
                         }
                         unset($event['timezone']);
                     }
-                    $newEvent = Event::create($event);
+                    $eventParticipants = $event['participants'] ?? [];
                     if (isset($event['participants'])) {
-                        $newEvent->participants()->sync($participants->whereIn('name', $event['participants'])->pluck('id'));
+                        unset($event['participants']);
                     }
+                    Event::create($event)->participants()->sync($participants->whereIn('name', $eventParticipants)->pluck('id'));
                     $created++;
                 }
             }
