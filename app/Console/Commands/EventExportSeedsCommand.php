@@ -6,7 +6,7 @@ use App\Models\Event;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-class ExportEventSeedsCommand extends Command
+class EventExportSeedsCommand extends Command
 {
     /**
      * The name and signature of the console command.
