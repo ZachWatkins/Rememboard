@@ -14,7 +14,7 @@ class EventSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(string $path = ''): void
+    public function run(?string $path = null): void
     {
         if (null === $path) {
             $matches = glob(database_path('seeders' . DIRECTORY_SEPARATOR . 'events.json'));
