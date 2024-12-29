@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         (new ParticipantSeeder())->run();
+        (new EventSeeder())->run();
     }
 }
