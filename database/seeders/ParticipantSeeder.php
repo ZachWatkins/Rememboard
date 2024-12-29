@@ -16,8 +16,8 @@ class ParticipantSeeder extends Seeder
     public function run(?string $path = null): void
     {
         if (null === $path) {
-            $matches = glob(database_path('seeders' . DIRECTORY_SEPARATOR . 'participants*.json'));
-            if (empty($matches)) {
+            $matches = [database_path('seeders' . DIRECTORY_SEPARATOR . 'participants.json')];
+            if (!file_exists($matches[0])) {
                 return;
             }
         } else {
