@@ -34,20 +34,19 @@ class IcsFileAdapter
             $name = $vevent->SUMMARY->getValue();
             if (!\in_array($name, $names, true)) {
                 $names[] = $name;
-                $event = new Event();
-                $event->name = $name;
-                $event->description = $vevent->DESCRIPTION?->getValue() ?? '';
-                $event->start_date = $vevent->DTSTART->getDateTime()->format('Y-m-d H:i:s');
-                $event->end_date = $vevent->DTEND?->getDateTime()->format('Y-m-d H:i:s') ?? null;
-                $event->address = $vevent->LOCATION?->getValue() ?? '';
-                if ($event->address) {
-                    $event->is_trip = true;
-                }
-                $event->city = $addressParser->getCity($event->address);
-                $event->state = $addressParser->getState($event->address);
-                $event->zip = $addressParser->getZip($event->address);
-                $event->country = $addressParser->getCountry($event->address);
-                yield $event;
+                $address = $vevent->LOCATION?->getValue() ?? '';
+                yield new Event([
+                    'name' => $name,
+                    'description' => $vevent->DESCRIPTION?->getValue() ?? '',
+                    'start_date' => $vevent->DTSTART->getDateTime()->format('Y-m-d H:i:s'),
+                    'end_date' => $vevent->DTEND?->getDateTime()->format('Y-m-d H:i:s') ?? null,
+                    'address' => $address,
+                    'is_trip' => $address ? true : false,
+                    'city' => $addressParser->getCity($address),
+                    'state' => $addressParser->getState($address),
+                    'zip' => $addressParser->getZip($address),
+                    'country' => $addressParser->getCountry($address),
+                ]);
             }
         }
     }
