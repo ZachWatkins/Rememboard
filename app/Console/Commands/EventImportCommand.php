@@ -43,15 +43,15 @@ class EventImportCommand extends Command
                 $duplicates++;
                 continue;
             }
-            if ($tripsOnly && !$event->address) {
-                $skipped++;
-                continue;
-            }
             if ($promptEachEvent && 'y' !== strtolower($this->ask("Import \"{$event->name}\"? Y/n"))) {
                 $skipped++;
                 continue;
             }
-            if ($tripsOnly || 'y' === strtolower($this->ask("Is the event {$event->name} a trip? Y/n"))) {
+            if ($tripsOnly && !$event->address) {
+                $skipped++;
+                continue;
+            }
+            if ($event->address || 'y' === strtolower($this->ask("Is the event {$event->name} a trip? Y/n"))) {
                 $event->is_trip = true;
             }
             if ($event->address) {
@@ -60,10 +60,6 @@ class EventImportCommand extends Command
                     $event->latitude = $coords['latitude'];
                     $event->longitude = $coords['longitude'];
                 }
-                $event->city = $addressParser->getCity($event->address);
-                $event->state = $addressParser->getState($event->address);
-                $event->zip = $addressParser->getZip($event->address);
-                $event->country = $addressParser->getCountry($event->address);
             }
             $event->save();
             $ids[] = $event->id;
