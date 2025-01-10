@@ -43,6 +43,9 @@ class IcsFileAdapter
                 if ($event->address) {
                     $event->is_trip = true;
                 }
+                $event->city = $addressParser->getCity($event->address);
+                $event->state = $addressParser->getState($event->address);
+                $event->zip = $addressParser->getZip($event->address);
                 $event->country = $addressParser->getCountry($event->address);
                 yield $event;
             }
