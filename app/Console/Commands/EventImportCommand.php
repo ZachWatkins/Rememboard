@@ -54,10 +54,16 @@ class EventImportCommand extends Command
             if ($tripsOnly || 'y' === strtolower($this->ask("Is the event {$event->name} a trip? Y/n"))) {
                 $event->is_trip = true;
             }
-            if ($requestCoordinates && $event->address) {
-                $coords = $geolocationService->getCoordinates($event->address);
-                $event->latitude = $coords['latitude'];
-                $event->longitude = $coords['longitude'];
+            if ($event->address) {
+                if ($requestCoordinates) {
+                    $coords = $geolocationService->getCoordinates($event->address);
+                    $event->latitude = $coords['latitude'];
+                    $event->longitude = $coords['longitude'];
+                }
+                $event->city = $addressParser->getCity($event->address);
+                $event->state = $addressParser->getState($event->address);
+                $event->zip = $addressParser->getZip($event->address);
+                $event->country = $addressParser->getCountry($event->address);
             }
             $event->save();
             $ids[] = $event->id;
