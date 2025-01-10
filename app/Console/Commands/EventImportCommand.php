@@ -28,7 +28,7 @@ class EventImportCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(IcsFileAdapter $adapter, GeolocationService $geolocationService, AddressParsingService $addressParser)
+    public function handle(IcsFileAdapter $adapter, GeolocationService $geolocationService)
     {
         $path = $this->ask('Enter the path or pattern for the ICS file in app/private');
         $tripsOnly = 'y' === strtolower($this->ask('Only import events with addresses and mark them as trips? Y/n'));
@@ -38,7 +38,7 @@ class EventImportCommand extends Command
         $skipped = 0;
         $duplicates = 0;
         $ids = [];
-        foreach ($adapter->getEvents($path, $addressParser) as $event) {
+        foreach ($adapter->getEvents($path) as $event) {
             if (Event::where('name', $event->name)->exists()) {
                 $duplicates++;
                 continue;
@@ -47,19 +47,18 @@ class EventImportCommand extends Command
                 $skipped++;
                 continue;
             }
-            if ($tripsOnly && !$event->address) {
-                $skipped++;
-                continue;
-            }
-            if ($event->address || 'y' === strtolower($this->ask("Is the event {$event->name} a trip? Y/n"))) {
+            if ($tripsOnly) {
+                if (!$event->is_trip) {
+                    $skipped++;
+                    continue;
+                }
+            } elseif (!$event->is_trip && 'y' === strtolower($this->ask("Is the event {$event->name} a trip? Y/n"))) {
                 $event->is_trip = true;
             }
-            if ($event->address) {
-                if ($requestCoordinates) {
-                    $coords = $geolocationService->getCoordinates($event->address);
-                    $event->latitude = $coords['latitude'];
-                    $event->longitude = $coords['longitude'];
-                }
+            if ($requestCoordinates && $event->address) {
+                $coords = $geolocationService->getCoordinates($event->address);
+                $event->latitude = $coords['latitude'];
+                $event->longitude = $coords['longitude'];
             }
             $event->save();
             $ids[] = $event->id;

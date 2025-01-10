@@ -12,7 +12,7 @@ class IcsFileAdapter
      * Get events from a .ics file.
      * @param string $path Path to a file in app/private.
      */
-    public function getEvents(string $path, AddressParsingService $addressParser): \Generator
+    public function getEvents(string $path): \Generator
     {
         if ('ics' !== pathinfo($path, PATHINFO_EXTENSION)) {
             throw new \InvalidArgumentException('File must be a .ics file: ' . $path);
@@ -27,6 +27,7 @@ class IcsFileAdapter
             $realpath = $paths[0];
         }
 
+        $addressParser = app(AddressParsingService::class);
         $vcalendar = VObject\Reader::read(fopen($realpath, 'r'), VObject\Reader::OPTION_FORGIVING);
         $names = [];
 
