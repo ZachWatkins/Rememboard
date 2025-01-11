@@ -12,12 +12,14 @@ test('can upload .ics files', function () {
     $path = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $name;
     copy($fixture, $path);
     $file = new \Illuminate\Http\UploadedFile($path, $name, 'text/calendar', null, true);
+    expect(Event::count())->toBe(0);
 
     $response = $this->actingAs($user)->post('/calendar/import', ['file' => $file]);
 
     $response->assertRedirect();
     $response->assertSessionHas('events');
-    $events = $response->session()->get('events');
+    
+    $events = Event::all();
     expect($events)->toBeInstanceOf(\Illuminate\Support\Collection::class);
     expect($events->count())->toBe(1);
     expect($events->first())->toBeInstanceOf(Event::class);
