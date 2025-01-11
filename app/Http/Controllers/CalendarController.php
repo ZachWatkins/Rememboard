@@ -33,6 +33,7 @@ class CalendarController extends Controller
 
         $count = 0;
 
+        $events = collect();
         foreach ($adapter->getEvents($path, $addressParser) as $event) {
             if (true === $request->input('request_coordinates') && $event->address) {
                 $coords = $geolocationService->getCoordinates($event->address);
@@ -40,8 +41,11 @@ class CalendarController extends Controller
                 $event->longitude = $coords['longitude'];
             }
             $event->save();
+            $events->push($event);
             $count++;
         }
+
+        $request->session()->flash('events', $events);
 
         return redirect()->back()->with('count_imported', $count);
     }
