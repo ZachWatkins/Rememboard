@@ -13,7 +13,7 @@ test('can upload .ics files', function () {
     copy($fixture, $path);
     $file = new \Illuminate\Http\UploadedFile($path, $name, 'text/calendar', null, true);
 
-    $response = $this->actingAs($user)->post('/events/import', ['file' => $file]);
+    $response = $this->actingAs($user)->post('/calendar/import', ['file' => $file]);
 
     $response->assertRedirect();
     $response->assertSessionHas('events');
