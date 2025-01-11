@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CalendarImportController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -16,6 +17,11 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/calendar', function () {
+    return Inertia::render('Calendar');
+})->middleware(['auth', 'verified'])->name('calendar');
+Route::get('/calendar/import', [CalendarImportController::class, 'show'])->middleware(['auth', 'verified'])->name('calendar.import');
+Route::post('/calendar/upload', [CalendarImportController::class, 'store'])->middleware(['auth', 'verified'])->name('calendar.upload');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

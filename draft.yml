@@ -37,6 +37,16 @@ controllers:
     trips:
       query: where:is_trip:true order:start_date
       respond: trips
+  CalendarController:
+    show:
+      render: inertia.calendar
+  CalendarImportController:
+    show:
+      render: inertia.calendar-import
+    upload:
+      validate: required|file|mimes:ics
+      store: temp
+      redirect: show
   EventImportController:
     show:
       render: inertia.event-import
