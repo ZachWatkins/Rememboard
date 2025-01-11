@@ -2,14 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use App\Services\GeolocationService;
+use App\Services\File\IcsFileAdapter;
+use Illuminate\Http\RedirectResponse;
+use App\Services\AddressParsingService;
 
 class CalendarController extends Controller
 {
     public function show(): Response
     {
         return Inertia::render('Calendar');
+    }
+
+    public function import(): Response
+    {
+        return Inertia::render('Calendar/Import');
+    }
+
+    public function store(Request $request, IcsFileAdapter $adapter, GeolocationService $geolocationService, AddressParsingService $addressParser): RedirectResponse
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:ics',
+            'request_coordinates' => 'boolean',
+        ]);
+
+        $path = $request->file('file')->store('temp');
+
+        $count = 0;
+
+        foreach ($adapter->getEvents($path, $addressParser) as $event) {
+            if (true === $request->input('request_coordinates') && $event->address) {
+                $coords = $geolocationService->getCoordinates($event->address);
+                $event->latitude = $coords['latitude'];
+                $event->longitude = $coords['longitude'];
+            }
+            $event->save();
+            $count++;
+        }
+
+        return redirect()->back()->with('count_imported', $count);
     }
 }

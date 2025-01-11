@@ -40,17 +40,9 @@ controllers:
   CalendarController:
     show:
       render: inertia.calendar
-  CalendarImportController:
-    show:
+    import:
       render: inertia.calendar-import
-    upload:
-      validate: required|file|mimes:ics
-      store: temp
-      redirect: show
-  EventImportController:
-    show:
-      render: inertia.event-import
-    upload:
+    store:
       validate: required|file|mimes:ics
       store: temp
       redirect: show
