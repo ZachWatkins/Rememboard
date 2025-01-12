@@ -40,6 +40,10 @@ class CalendarController extends Controller
                 $event->latitude = $coords['latitude'];
                 $event->longitude = $coords['longitude'];
             }
+            $event->start_date = \dateFromTimezone($event->start_date, $event->timezone);
+            if ($event->end_date) {
+                $event->end_date = \dateFromTimezone($event->end_date, $event->timezone);
+            }
             $event->save();
             $events->push($event);
             $count++;
