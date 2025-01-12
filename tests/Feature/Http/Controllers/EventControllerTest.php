@@ -239,7 +239,7 @@ test('update redirects', function (): void {
 
     expect($name)->toEqual($event->name);
     expect($description)->toEqual($event->description);
-    expect($start_date)->toEqual(\dateToSessionTime($event->start_date, $user));
+    expect((string) $start_date)->toEqual(\dateToSessionTime($event->start_date, $user));
     expect($latitude)->toEqual($event->latitude);
     expect($longitude)->toEqual($event->longitude);
     expect($address)->toEqual($event->address);
