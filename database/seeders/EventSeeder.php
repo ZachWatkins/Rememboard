@@ -37,9 +37,6 @@ class EventSeeder extends Seeder
                 if (Event::where('name', $event['name'])->exists()) {
                     $skipped++;
                 } else {
-                    if (!isset($event['timezone'])) {
-                        $event['timezone'] = 'America/Chicago';
-                    }
                     $event['start_date'] = \dateFromTimezone($event['start_date'], $event['timezone']);
                     if (isset($event['end_date']) && $event['end_date']) {
                         $event['end_date'] = \dateFromTimezone($event['end_date'], $event['timezone']);

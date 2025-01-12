@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Database\Factories\UserFactory;
 use App\Services\GeolocationService;
 use Illuminate\Support\Facades\Vite;
 use App\Services\AddressParsingService;
