@@ -7,6 +7,7 @@ models:
     latitude: decimal:10,8 nullable
     longitude: decimal:11,8 nullable
     address: string:255 nullable
+    street_address: string:255 nullable
     city: string:100 nullable
     state: string:100 nullable
     zip: string:10 nullable

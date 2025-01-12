@@ -23,6 +23,7 @@ class Event extends Model
         'latitude',
         'longitude',
         'address',
+        'street_address',
         'city',
         'state',
         'zip',
