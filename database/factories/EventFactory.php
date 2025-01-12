@@ -30,6 +30,7 @@ class EventFactory extends Factory
             'address' => $this->faker->address(),
             'city' => $this->faker->city(),
             'state' => $this->faker->text(100),
+            'timezone' => 'America/Chicago',
             'folder_name' => $this->faker->regexify('[A-Za-z0-9]{255}'),
             'show_on_countdown' => $this->faker->boolean(),
             'is_trip' => $this->faker->boolean(),
