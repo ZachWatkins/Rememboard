@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
@@ -9,6 +10,11 @@ class GeolocationService
 {
     public function getCoordinates(string $address): array
     {
+        $existing = Event::where('address', $address)->whereNotNull('latitude')->whereNotNull('longitude')->first();
+        if ($existing) {
+            return $existing->only('latitude', 'longitude');
+        }
+
         $key = preg_replace('/[^a-zA-Z0-9]/', '_', $address);
         return Cache::remember("geolocation_{$key}", 60 * 60 * 24, function () use ($address) {
             $response = Http::withHeaders([
