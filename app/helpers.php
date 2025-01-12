@@ -42,10 +42,10 @@ if (!function_exists('dateFromSessionTime')) {
         if (!$sessionDatetime) {
             return null;
         }
-        $clientTimezoneOffset = session('timezoneOffset'); // minutes.
         if ($user?->timezone) {
-            $clientTimezoneOffset = (new \DateTimeZone($user->timezone))->getOffset(new \DateTime()) / 60;
+            return dateFromTimezone($sessionDatetime, $user->timezone);
         }
+        $clientTimezoneOffset = session('timezoneOffset'); // minutes.
         if ($clientTimezoneOffset === null || $clientTimezoneOffset === 0) {
             return $sessionDatetime;
         }
@@ -53,5 +53,22 @@ if (!function_exists('dateFromSessionTime')) {
             return (new \DateTime($sessionDatetime))->modify('-' . $clientTimezoneOffset . ' minutes')->format('Y-m-d H:i:s');
         }
         return (new \DateTime($sessionDatetime))->modify('+' . abs($clientTimezoneOffset) . ' minutes')->format('Y-m-d H:i:s');
+    }
+}
+
+if (!function_exists('dateFromTimezone')) {
+    /**
+     * Convert a datetime string from a timezone to the application's timezone.
+     *
+     * @param string $datetime
+     * @param string $timezone
+     * @return string
+     */
+    function dateFromTimezone(string $datetime, ?string $timezone = null): string
+    {
+        if (!$timezone) {
+            return $datetime;
+        }
+        return (new \DateTime($datetime, new \DateTimeZone($timezone)))->setTimezone(new \DateTimeZone(config('app.timezone')))->format('Y-m-d H:i:s');
     }
 }

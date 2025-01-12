@@ -12,6 +12,7 @@
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
+        "sabre/vobject": "^4.5",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
@@ -65,7 +66,11 @@
         ],
         "dev-win": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php -S localhost:8888 -t public\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names=server,queue,logs,vite"
+            "npx concurrently -c \"#93c5fd,#fdba74\" \"php -S localhost:8888 -t public\" \"npm run dev\" --names=server,logs,vite"
+        ],
+        "test": [
+            "php artisan config:clear",
+            "php artisan test"
         ]
     },
     "extra": {
