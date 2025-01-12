@@ -9,6 +9,11 @@ on:
       - reopened
       - synchronize
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: read
+
 jobs:
   audit:
     runs-on: ubuntu-latest
