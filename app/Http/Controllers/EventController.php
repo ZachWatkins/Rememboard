@@ -39,6 +39,9 @@ class EventController extends Controller
         if (isset($validated['end_date'])) {
             $validated['end_date'] = \dateFromSessionTime($validated['end_date'], $request->user());
         }
+        if (!isset($validated['timezone'])) {
+            $validated['timezone'] = $request->user()->timezone;
+        }
         $event = Event::create($validated);
 
         $request->session()->flash('event.id', $event->id);
