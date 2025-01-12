@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('state', 100)->nullable();
             $table->string('zip', 10)->nullable();
             $table->string('country', 255)->nullable();
+            $table->string('timezone', 100);
             $table->string('folder_name', 255)->nullable();
             $table->boolean('show_on_countdown')->default(false);
             $table->boolean('is_trip')->default(false);

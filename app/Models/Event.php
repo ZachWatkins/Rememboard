@@ -27,6 +27,7 @@ class Event extends Model
         'state',
         'zip',
         'country',
+        'timezone',
         'folder_name',
         'show_on_countdown',
         'is_trip',

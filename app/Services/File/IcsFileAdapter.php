@@ -27,6 +27,7 @@ class IcsFileAdapter
             $realpath = $paths[0];
         }
 
+        $userTimezone = auth()->user()->timezone;
         $addressParser = app(AddressParsingService::class);
         $vcalendar = VObject\Reader::read(fopen($realpath, 'r'), VObject\Reader::OPTION_FORGIVING);
         $names = [];
@@ -47,6 +48,7 @@ class IcsFileAdapter
                     'state' => $addressParser->getState($address),
                     'zip' => $addressParser->getZip($address),
                     'country' => $addressParser->getCountry($address),
+                    'timezone' => $vevent->DTSTART->parameters['TZID']->getValue() ?? $userTimezone,
                 ]);
             }
         }
