@@ -43,7 +43,7 @@ if (!function_exists('dateFromSessionTime')) {
             return null;
         }
         if ($user?->timezone) {
-            return dateFromTimezone($user->timezone, $sessionDatetime);
+            return dateFromTimezone($sessionDatetime, $user->timezone);
         }
         $clientTimezoneOffset = session('timezoneOffset'); // minutes.
         if ($clientTimezoneOffset === null || $clientTimezoneOffset === 0) {
