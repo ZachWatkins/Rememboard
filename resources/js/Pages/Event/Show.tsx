@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { Event as EventModel } from "@/types";
+import { formatServerTimestamp } from "@/utils";
 
 export default function Show({ event }: { event: EventModel }) {
     return (
@@ -12,18 +13,44 @@ export default function Show({ event }: { event: EventModel }) {
             }
         >
             <Head title="Create Event" />
-            <div>
-                <p>Countdown: {event.countdown}</p>
-                <h3>Description</h3>
-                <p>{event.description}</p>
-                <h3>Dates</h3>
-                <p>Start Date: {event.start_date}</p>
-                <p>End Date: {event.end_date}</p>
-                <h3>Location</h3>
-                <p>Latitude: {event.latitude}</p>
-                <p>Longitude: {event.longitude}</p>
-                <p>City: {event.city}</p>
-                <p>State: {event.state}</p>
+
+            <div className="py-12">
+                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                        <div className="p-6 text-gray-900">
+                            {event.countdown && (
+                                <p>Countdown: {event.countdown}</p>
+                            )}
+                            {event.description && (
+                                <>
+                                    <h3>Description</h3>
+                                    <p>{event.description}</p>
+                                </>
+                            )}
+                            {event.latitude && event.longitude && (
+                                <>
+                                    <p>Latitude: {event.latitude}</p>
+                                    <p>Longitude: {event.longitude}</p>
+                                </>
+                            )}
+                            {event.address && (
+                                <p className="mb-4">{event.address}</p>
+                            )}
+                            <p>
+                                {formatServerTimestamp(event.start_date)}
+                                {event.end_date &&
+                                    event.end_date !== event.start_date && (
+                                        <>
+                                            {" "}to{" "}
+                                            {formatServerTimestamp(
+                                                event.end_date
+                                            )}
+                                        </>
+                                    )}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </AuthenticatedLayout>
     );
