@@ -14,7 +14,7 @@ class CalendarController extends Controller
 {
     public function show(): Response
     {
-        return Inertia::render('Calendar');
+        return Inertia::render('Calendar/Import');
     }
 
     public function import(): Response
