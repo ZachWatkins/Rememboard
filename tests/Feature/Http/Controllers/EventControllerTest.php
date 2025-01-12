@@ -8,10 +8,6 @@ use Illuminate\Support\Carbon;
 use Inertia\Testing\AssertableInertia as Assert;
 use function Pest\Faker\fake;
 use function Pest\Laravel\assertModelMissing;
-use function Pest\Laravel\delete;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
-use function Pest\Laravel\put;
 
 uses(\JMac\Testing\Traits\AdditionalAssertions::class);
 
@@ -243,7 +239,7 @@ test('update redirects', function (): void {
 
     expect($name)->toEqual($event->name);
     expect($description)->toEqual($event->description);
-    expect($start_date)->toEqual(\dateToSessionTime($event->start_date, $user));
+    expect((string) $start_date)->toEqual(\dateToSessionTime($event->start_date, $user));
     expect($latitude)->toEqual($event->latitude);
     expect($longitude)->toEqual($event->longitude);
     expect($address)->toEqual($event->address);

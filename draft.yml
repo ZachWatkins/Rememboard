@@ -6,11 +6,22 @@ models:
     end_date: datetime nullable
     latitude: decimal:10,8 nullable
     longitude: decimal:11,8 nullable
+    address: string:255 nullable
+    street_address: string:255 nullable
     city: string:100 nullable
     state: string:100 nullable
+    zip: string:10 nullable
+    country: string:255 nullable
+    timezone: string:100 nullable
     folder_name: string:255 nullable
     show_on_countdown: boolean default:false
     is_trip: boolean default:false
+    relationships:
+      belongsToMany: Participant
+  Participant:
+    name: string:100 unique
+    relationships:
+      hasMany: Event
   Chore:
     name: string:100
     description: string:255
@@ -28,3 +39,12 @@ controllers:
     trips:
       query: where:is_trip:true order:start_date
       respond: trips
+  CalendarController:
+    show:
+      render: inertia.calendar
+    import:
+      render: inertia.calendar-import
+    store:
+      validate: required|file|mimes:ics
+      store: temp
+      redirect: show

@@ -20,8 +20,12 @@ return new class extends Migration
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->string('address', 255)->nullable();
+            $table->string('street_address', 255)->nullable();
             $table->string('city', 100)->nullable();
             $table->string('state', 100)->nullable();
+            $table->string('zip', 10)->nullable();
+            $table->string('country', 255)->nullable();
+            $table->string('timezone', 100);
             $table->string('folder_name', 255)->nullable();
             $table->boolean('show_on_countdown')->default(false);
             $table->boolean('is_trip')->default(false);

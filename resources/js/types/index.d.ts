@@ -7,7 +7,7 @@ export interface User {
 }
 
 export type PageProps<
-    T extends Record<string, unknown> = Record<string, unknown>,
+    T extends Record<string, unknown> = Record<string, unknown>
 > = T & {
     auth: {
         user: User;
@@ -25,5 +25,9 @@ export interface Event {
     address: string | null;
     city: string | null;
     state: string | null;
+    zip: string | null;
+    country: string | null;
+    timezone: string;
+    is_trip: boolean;
     countdown?: string;
 }
