@@ -18,7 +18,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/calendar', function () {
-    return Inertia::render('Calendar');
+    return Inertia::render('Calendar/Import');
 })->middleware(['auth', 'verified'])->name('calendar');
 Route::get('/calendar/import', [CalendarController::class, 'show'])->middleware(['auth', 'verified'])->name('calendar.import');
 Route::post('/calendar/import', [CalendarController::class, 'store'])->middleware(['auth', 'verified']);
