@@ -48,7 +48,7 @@ class IcsFileAdapter
                     'state' => $addressParser->getState($address),
                     'zip' => $addressParser->getZip($address),
                     'country' => $addressParser->getCountry($address),
-                    'timezone' => $vevent->DTSTART->parameters['TZID']->getValue() ?? $userTimezone,
+                    'timezone' => $vevent->DTSTART->parameters['TZID']?->getValue() ?? $userTimezone,
                 ]);
             }
         }
