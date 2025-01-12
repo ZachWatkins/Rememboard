@@ -18,7 +18,6 @@ export default function Dashboard({ events }: { events: Event[] }) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            {/* List all events. */}
                             <div className="text-2xl font-semibold text-gray-800">
                                 Events
                             </div>
