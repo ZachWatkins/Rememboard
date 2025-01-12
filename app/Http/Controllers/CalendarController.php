@@ -49,7 +49,7 @@ class CalendarController extends Controller
             $count++;
         }
 
-        $request->session()->flash('events', $events);
+        $request->session()->flash('events', $events->map->only('name'));
 
         return redirect()->back()->with('count_imported', $count);
     }
