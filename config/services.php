@@ -39,6 +39,7 @@ return [
         'maps' => [
             'client_id' => env('AZURE_MAPS_CLIENT_ID'),
             'subscription_key' => env('AZURE_MAPS_SUBSCRIPTION_KEY'),
+            'monthly_limit' => env('AZURE_MAPS_MONTHLY_LIMIT', 5000),
         ],
     ],
 
