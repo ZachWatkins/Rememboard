@@ -8,8 +8,10 @@ use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function show(): Response
+    public function show(Request $request): Response
     {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboard', [
+            'events' => \App\Models\Event::all(),
+        ]);
     }
 }
