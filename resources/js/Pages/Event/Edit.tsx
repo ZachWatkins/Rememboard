@@ -9,6 +9,7 @@ import DateInput from "@/Components/DateInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import DangerButton from "@/Components/DangerButton";
 import Checkbox from "@/Components/Checkbox";
+import NavLink from "@/Components/NavLink";
 
 export default function Update({ event }: { event: EventModel }) {
     const {
@@ -37,7 +38,14 @@ export default function Update({ event }: { event: EventModel }) {
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    {event.name} <small>(Editing)</small>
+                    Edit Event &rarr; {event.name}
+                    <NavLink
+                        target="_blank"
+                        href={route("events.show", event.id)}
+                        className="inline-block ml-4 underline"
+                    >
+                        View Event
+                    </NavLink>
                 </h2>
             }
         >
@@ -65,6 +73,10 @@ export default function Update({ event }: { event: EventModel }) {
                                                 )
                                             }
                                         />
+                                        <InputError
+                                            className="w-full"
+                                            message={errors.is_trip}
+                                        />
                                     </div>
                                     <div className="col-span-8">
                                         <InputLabel
@@ -83,15 +95,11 @@ export default function Update({ event }: { event: EventModel }) {
                                                 )
                                             }
                                         />
+                                        <InputError
+                                            className="w-full"
+                                            message={errors.show_on_countdown}
+                                        />
                                     </div>
-                                    <InputError
-                                        className="col-span-10 col-offset-2"
-                                        message={errors.is_trip}
-                                    />
-                                    <InputError
-                                        className="col-span-10 col-offset-2"
-                                        message={errors.show_on_countdown}
-                                    />
                                     <InputLabel
                                         className="col-span-2"
                                         value="Name"
@@ -106,7 +114,7 @@ export default function Update({ event }: { event: EventModel }) {
                                         }
                                     />
                                     <InputError
-                                        className="col-span-10 col-offset-2"
+                                        className="col-span-10 col-start-3"
                                         message={errors.name}
                                     />
                                     <InputLabel
@@ -126,7 +134,7 @@ export default function Update({ event }: { event: EventModel }) {
                                         }
                                     />
                                     <InputError
-                                        className="col-span-10 col-offset-2"
+                                        className="col-span-10 col-start-3"
                                         message={errors.description}
                                     />
                                     <div className="col-span-2">
@@ -142,33 +150,40 @@ export default function Update({ event }: { event: EventModel }) {
                                             htmlFor="end_date"
                                         />
                                     </div>
-                                    <DateInput
-                                        className="col-span-5"
-                                        name="start_date"
-                                        value={data.start_date}
-                                        onChange={(e) =>
-                                            setData(
-                                                "start_date",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    <DateInput
-                                        className="col-span-5"
-                                        name="end_date"
-                                        value={data.end_date || ""}
-                                        onChange={(e) =>
-                                            setData("end_date", e.target.value)
-                                        }
-                                    />
-                                    <InputError
-                                        className="col-span-10 col-offset-2"
-                                        message={errors.start_date}
-                                    />
-                                    <InputError
-                                        className="col-span-10 col-offset-2"
-                                        message={errors.end_date}
-                                    />
+                                    <div className="col-span-5">
+                                        <DateInput
+                                            className="col-span-5"
+                                            name="start_date"
+                                            value={data.start_date}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "start_date",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            className="col-span-10 col-offset-2"
+                                            message={errors.start_date}
+                                        />
+                                    </div>
+                                    <div className="col-span-5">
+                                        <DateInput
+                                            className="w-full"
+                                            name="end_date"
+                                            value={data.end_date || ""}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "end_date",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            className="mt-4"
+                                            message={errors.end_date}
+                                        />
+                                    </div>
                                     <div className="col-span-2">
                                         <InputLabel
                                             className="inline-block"
@@ -182,36 +197,40 @@ export default function Update({ event }: { event: EventModel }) {
                                             htmlFor="longitude"
                                         />
                                     </div>
-                                    <TextInput
-                                        className="col-span-5"
-                                        name="latitude"
-                                        value={data.latitude || ""}
-                                        onChange={(e) =>
-                                            setData(
-                                                "latitude",
-                                                Number(e.target.value)
-                                            )
-                                        }
-                                    />
-                                    <TextInput
-                                        className="col-span-5"
-                                        name="longitude"
-                                        value={data.longitude || ""}
-                                        onChange={(e) =>
-                                            setData(
-                                                "longitude",
-                                                Number(e.target.value)
-                                            )
-                                        }
-                                    />
-                                    <InputError
-                                        className="col-span-10 col-offset-2"
-                                        message={errors.latitude}
-                                    />
-                                    <InputError
-                                        className="col-span-10 col-offset-2"
-                                        message={errors.longitude}
-                                    />
+                                    <div className="col-span-5">
+                                        <TextInput
+                                            className="w-full"
+                                            name="latitude"
+                                            value={data.latitude || ""}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "latitude",
+                                                    Number(e.target.value)
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            className="mt-4"
+                                            message={errors.latitude}
+                                        />
+                                    </div>
+                                    <div className="col-span-5">
+                                        <TextInput
+                                            className="w-full"
+                                            name="longitude"
+                                            value={data.longitude || ""}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "longitude",
+                                                    Number(e.target.value)
+                                                )
+                                            }
+                                        />
+                                        <InputError
+                                            className="mt-4"
+                                            message={errors.longitude}
+                                        />
+                                    </div>
                                     <InputLabel
                                         className="col-span-2"
                                         value="Address"
@@ -263,7 +282,7 @@ export default function Update({ event }: { event: EventModel }) {
                                         }
                                     />
                                     <InputError
-                                        className="col-span-10 col-offset-2"
+                                        className="col-span-10 col-start-3"
                                         message={errors.city}
                                     />
                                     <InputLabel
@@ -280,7 +299,7 @@ export default function Update({ event }: { event: EventModel }) {
                                         }
                                     />
                                     <InputError
-                                        className="col-span-10 col-offset-2"
+                                        className="col-span-10 col-start-3"
                                         message={errors.state}
                                     />
                                     <InputLabel
@@ -297,7 +316,7 @@ export default function Update({ event }: { event: EventModel }) {
                                         }
                                     />
                                     <InputError
-                                        className="col-span-10 col-offset-2"
+                                        className="col-span-10 col-start-3"
                                         message={errors.zip}
                                     />
                                     <InputLabel
@@ -314,7 +333,7 @@ export default function Update({ event }: { event: EventModel }) {
                                         }
                                     />
                                     <InputError
-                                        className="col-span-10 col-offset-2"
+                                        className="col-span-10 col-start-3"
                                         message={errors.country}
                                     />
                                     <InputLabel
@@ -331,7 +350,7 @@ export default function Update({ event }: { event: EventModel }) {
                                         }
                                     />
                                     <InputError
-                                        className="col-span-10 col-offset-2"
+                                        className="col-span-10 col-start-3"
                                         message={errors.timezone}
                                     />
                                     <PrimaryButton

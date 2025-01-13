@@ -21,17 +21,21 @@ class EventUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100'],
-            'description' => ['required', 'string', 'max:255'],
-            'start_date' => ['required'],
-            'end_date' => ['nullable'],
-            'latitude' => ['required', 'numeric', 'between:-99.99999999,99.99999999'],
-            'longitude' => ['required', 'numeric', 'between:-999.99999999,999.99999999'],
-            'address' => ['required', 'string'],
-            'city' => ['required', 'string'],
-            'state' => ['required', 'string'],
-            'folder_name' => ['required', 'string', 'max:255'],
-            'show_on_countdown' => ['required'],
-            'is_trip' => ['required'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['nullable', 'after:start_date', 'date'],
+            'latitude' => ['nullable', 'numeric', 'between:-99.99999999,99.99999999'],
+            'longitude' => ['nullable', 'numeric', 'between:-999.99999999,999.99999999'],
+            'address' => ['nullable', 'string'],
+            'street_address' => ['nullable', 'string'],
+            'city' => ['nullable', 'string'],
+            'state' => ['nullable', 'string'],
+            'zip' => ['nullable', 'string', 'max:10'],
+            'country' => ['nullable', 'string', 'max:255'],
+            'timezone' => ['nullable', 'string', 'max:100'],
+            'folder_name' => ['nullable', 'string', 'max:255'],
+            'show_on_countdown' => ['nullable', 'boolean'],
+            'is_trip' => ['nullable', 'boolean'],
         ];
     }
 }

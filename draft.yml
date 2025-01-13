@@ -1,7 +1,7 @@
 models:
   Event:
     name: string:100 unique
-    description: string:255
+    description: string:255 nullable
     start_date: datetime
     end_date: datetime nullable
     latitude: decimal:10,8 nullable

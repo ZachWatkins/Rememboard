@@ -10,7 +10,7 @@ export default function Show({ event }: { event: EventModel }) {
             header={
                 <>
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        {event.name}
+                        Event &rarr; {event.name}
                     </h2>
                     <NavLink
                         active={false}
