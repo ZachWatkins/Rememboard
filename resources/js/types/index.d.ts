@@ -23,11 +23,13 @@ export interface Event {
     latitude: number | null;
     longitude: number | null;
     address: string | null;
+    street_address: string | null;
     city: string | null;
     state: string | null;
     zip: string | null;
     country: string | null;
     timezone: string;
     is_trip: boolean;
+    show_on_countdown: boolean;
     countdown?: string;
 }

@@ -2,14 +2,24 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { Event as EventModel } from "@/types";
 import { formatServerTimestamp } from "@/utils";
+import NavLink from "@/Components/NavLink";
 
 export default function Show({ event }: { event: EventModel }) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    {event.name}
-                </h2>
+                <>
+                    <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                        {event.name}
+                    </h2>
+                    <NavLink
+                        active={false}
+                        href={route("events.edit", event.id)}
+                        className="mt-4"
+                    >
+                        Edit
+                    </NavLink>
+                </>
             }
         >
             <Head title="Create Event" />
@@ -41,7 +51,8 @@ export default function Show({ event }: { event: EventModel }) {
                                 {event.end_date &&
                                     event.end_date !== event.start_date && (
                                         <>
-                                            {" "}to{" "}
+                                            {" "}
+                                            to{" "}
                                             {formatServerTimestamp(
                                                 event.end_date
                                             )}
