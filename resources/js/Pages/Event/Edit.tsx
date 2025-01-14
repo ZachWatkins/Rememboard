@@ -23,7 +23,7 @@ export default function Update({ event }: { event: EventModel }) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post("/events", {
+        post(route("events.update"), {
             preserveScroll: true,
         });
     };
@@ -58,300 +58,97 @@ export default function Update({ event }: { event: EventModel }) {
                             <form onSubmit={submit}>
                                 <div className="grid grid-cols-12 gap-4">
                                     <div className="col-span-2 col-start-3">
-                                        <InputLabel
-                                            className="inline-block mr-4"
-                                            value="Is this a trip?"
-                                            htmlFor="is_trip"
-                                        />
-                                        <Checkbox
-                                            name="is_trip"
-                                            checked={data.is_trip}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "is_trip",
-                                                    e.target.checked
-                                                )
-                                            }
-                                        />
-                                        <InputError
-                                            className="w-full"
-                                            message={errors.is_trip}
+                                        <CheckboxField
+                                            label="Is this a trip?"
+                                            key="is_trip"
+                                            value={data.is_trip}
+                                            setData={setData}
+                                            errors={errors}
                                         />
                                     </div>
                                     <div className="col-span-8">
-                                        <InputLabel
-                                            className="inline-block mr-4"
-                                            value="Show on countdown?"
-                                            htmlFor="show_on_countdown"
-                                        />
-                                        <Checkbox
-                                            className="col-span-6"
-                                            name="show_on_countdown"
-                                            checked={data.show_on_countdown}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "show_on_countdown",
-                                                    e.target.checked
-                                                )
-                                            }
-                                        />
-                                        <InputError
-                                            className="w-full"
-                                            message={errors.show_on_countdown}
+                                        <CheckboxField
+                                            label="Show on countdown?"
+                                            key="show_on_countdown"
+                                            value={data.show_on_countdown}
+                                            setData={setData}
+                                            errors={errors}
                                         />
                                     </div>
-                                    <InputLabel
-                                        className="col-span-2"
-                                        value="Name"
-                                        htmlFor="name"
-                                    />
-                                    <TextInput
-                                        className="col-span-10"
-                                        name="name"
+                                    <TextField
+                                        label="Name"
+                                        key="name"
                                         value={data.name}
-                                        onChange={(e) =>
-                                            setData("name", e.target.value)
-                                        }
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <InputError
-                                        className="col-span-10 col-start-3"
-                                        message={errors.name}
+                                    <TextField
+                                        label="Description"
+                                        key="description"
+                                        value={data.name}
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <InputLabel
-                                        className="col-span-2"
-                                        value="Description"
-                                        htmlFor="description"
+                                    <StartEndDates
+                                        start_date={data.start_date}
+                                        end_date={data.end_date || ""}
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <TextInput
-                                        className="col-span-10"
-                                        name="description"
-                                        value={data.description}
-                                        onChange={(e) =>
-                                            setData(
-                                                "description",
-                                                e.target.value
-                                            )
-                                        }
+                                    <LatitudeLongitudeFields
+                                        latitude={data.latitude || 0}
+                                        longitude={data.longitude || 0}
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <InputError
-                                        className="col-span-10 col-start-3"
-                                        message={errors.description}
-                                    />
-                                    <div className="col-span-2">
-                                        <InputLabel
-                                            className="inline-block"
-                                            value="Start Date"
-                                            htmlFor="start_date"
-                                        />
-                                        ,{" "}
-                                        <InputLabel
-                                            className="inline-block"
-                                            value="End Date"
-                                            htmlFor="end_date"
-                                        />
-                                    </div>
-                                    <div className="col-span-5">
-                                        <DateInput
-                                            className="col-span-5"
-                                            name="start_date"
-                                            value={data.start_date}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "start_date",
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                        <InputError
-                                            className="col-span-10 col-offset-2"
-                                            message={errors.start_date}
-                                        />
-                                    </div>
-                                    <div className="col-span-5">
-                                        <DateInput
-                                            className="w-full"
-                                            name="end_date"
-                                            value={data.end_date || ""}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "end_date",
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                        <InputError
-                                            className="mt-4"
-                                            message={errors.end_date}
-                                        />
-                                    </div>
-                                    <div className="col-span-2">
-                                        <InputLabel
-                                            className="inline-block"
-                                            value="Latitude"
-                                            htmlFor="latitude"
-                                        />
-                                        ,{" "}
-                                        <InputLabel
-                                            className="inline-block"
-                                            value="Longitude"
-                                            htmlFor="longitude"
-                                        />
-                                    </div>
-                                    <div className="col-span-5">
-                                        <TextInput
-                                            className="w-full"
-                                            name="latitude"
-                                            value={data.latitude || ""}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "latitude",
-                                                    Number(e.target.value)
-                                                )
-                                            }
-                                        />
-                                        <InputError
-                                            className="mt-4"
-                                            message={errors.latitude}
-                                        />
-                                    </div>
-                                    <div className="col-span-5">
-                                        <TextInput
-                                            className="w-full"
-                                            name="longitude"
-                                            value={data.longitude || ""}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "longitude",
-                                                    Number(e.target.value)
-                                                )
-                                            }
-                                        />
-                                        <InputError
-                                            className="mt-4"
-                                            message={errors.longitude}
-                                        />
-                                    </div>
-                                    <InputLabel
-                                        className="col-span-2"
-                                        value="Address"
-                                        htmlFor="address"
-                                    />
-                                    <TextInput
-                                        className="col-span-10"
-                                        name="address"
+                                    <TextField
+                                        label="Address"
+                                        key="address"
                                         value={data.address || ""}
-                                        onChange={(e) =>
-                                            setData("address", e.target.value)
-                                        }
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <InputError
-                                        className="col-span-10 col-offset-2"
-                                        message={errors.address}
-                                    />
-                                    <InputLabel
-                                        className="col-span-2"
-                                        value="Street Address"
-                                        htmlFor="street_address"
-                                    />
-                                    <TextInput
-                                        className="col-span-10"
-                                        name="street_address"
+                                    <TextField
+                                        label="Street Address"
+                                        key="street_address"
                                         value={data.street_address || ""}
-                                        onChange={(e) =>
-                                            setData(
-                                                "street_address",
-                                                e.target.value
-                                            )
-                                        }
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <InputError
-                                        className="col-span-10 col-offset-2"
-                                        message={errors.street_address}
-                                    />
-                                    <InputLabel
-                                        className="col-span-2"
-                                        value="City"
-                                        htmlFor="city"
-                                    />
-                                    <TextInput
-                                        className="col-span-10"
-                                        name="city"
+                                    <TextField
+                                        label="City"
+                                        key="city"
                                         value={data.city || ""}
-                                        onChange={(e) =>
-                                            setData("city", e.target.value)
-                                        }
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <InputError
-                                        className="col-span-10 col-start-3"
-                                        message={errors.city}
-                                    />
-                                    <InputLabel
-                                        className="col-span-2"
-                                        value="State"
-                                        htmlFor="state"
-                                    />
-                                    <TextInput
-                                        className="col-span-10"
-                                        name="state"
+                                    <TextField
+                                        label="State"
+                                        key="state"
                                         value={data.state || ""}
-                                        onChange={(e) =>
-                                            setData("state", e.target.value)
-                                        }
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <InputError
-                                        className="col-span-10 col-start-3"
-                                        message={errors.state}
-                                    />
-                                    <InputLabel
-                                        className="col-span-2"
-                                        value="Zip"
-                                        htmlFor="zip"
-                                    />
-                                    <TextInput
-                                        className="col-span-10"
-                                        name="zip"
+                                    <TextField
+                                        label="Zip"
+                                        key="zip"
                                         value={data.zip || ""}
-                                        onChange={(e) =>
-                                            setData("zip", e.target.value)
-                                        }
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <InputError
-                                        className="col-span-10 col-start-3"
-                                        message={errors.zip}
-                                    />
-                                    <InputLabel
-                                        className="col-span-2"
-                                        value="Country"
-                                        htmlFor="country"
-                                    />
-                                    <TextInput
-                                        className="col-span-10"
-                                        name="country"
+                                    <TextField
+                                        label="Country"
+                                        key="country"
                                         value={data.country || ""}
-                                        onChange={(e) =>
-                                            setData("country", e.target.value)
-                                        }
+                                        setData={setData}
+                                        errors={errors}
                                     />
-                                    <InputError
-                                        className="col-span-10 col-start-3"
-                                        message={errors.country}
-                                    />
-                                    <InputLabel
-                                        className="col-span-2"
-                                        value="Timezone"
-                                        htmlFor="timezone"
-                                    />
-                                    <TextInput
-                                        className="col-span-10"
-                                        name="timezone"
+                                    <TextField
+                                        label="Timezone"
+                                        key="timezone"
                                         value={data.timezone || ""}
-                                        onChange={(e) =>
-                                            setData("timezone", e.target.value)
-                                        }
-                                    />
-                                    <InputError
-                                        className="col-span-10 col-start-3"
-                                        message={errors.timezone}
+                                        setData={setData}
+                                        errors={errors}
                                     />
                                     <PrimaryButton
                                         className="col-span-2 mt-4 text-center"
@@ -380,5 +177,195 @@ export default function Update({ event }: { event: EventModel }) {
                 </div>
             </div>
         </AuthenticatedLayout>
+    );
+}
+
+function CheckboxField({
+    label,
+    key,
+    value,
+    setData,
+    errors,
+}: {
+    label: string;
+    key: string;
+    value: boolean;
+    setData: (key: string, value: any) => void;
+    errors: { [key: string]: string };
+}) {
+    return (
+        <>
+            <InputLabel
+                className="inline-block mr-4"
+                value={label}
+                htmlFor={key}
+            />
+            <Checkbox
+                className="col-span-6"
+                name="show_on_countdown"
+                checked={value}
+                onChange={(e) => setData(key, e.target.checked)}
+            />
+            <InputError className="w-full" message={errors[key]} />
+        </>
+    );
+}
+
+function TextField({
+    label,
+    key,
+    value,
+    setData,
+    errors,
+}: {
+    label: string;
+    key: string;
+    value: string;
+    setData: (key: string, value: any) => void;
+    errors: { [key: string]: string };
+}) {
+    return (
+        <>
+            <InputLabel
+                className="col-span-2"
+                value={label}
+                htmlFor={key}
+            />
+            <TextInput
+                className="col-span-10"
+                name={key}
+                value={value}
+                onChange={(e) => setData(key, e.target.value)}
+            />
+            <InputError className="col-span-10 col-start-3" message={errors[key]} />
+        </>
+    );
+})
+
+function StartEndDates({
+    start_date,
+    end_date,
+    setData,
+    errors,
+}: {
+    start_date: string;
+    end_date: string;
+    setData: (key: string, value: any) => void;
+    errors: { [key: string]: string };
+}) {
+    return (
+        <>
+        <div className="col-span-2">
+            <InputLabel
+                className="inline-block"
+                value="Start Date"
+                htmlFor="start_date"
+            />
+            ,{" "}
+            <InputLabel
+                className="inline-block"
+                value="End Date"
+                htmlFor="end_date"
+            />
+        </div>
+        <div className="col-span-5">
+            <DateInput
+                className="col-span-5"
+                name="start_date"
+                value={start_date}
+                onChange={(e) =>
+                    setData(
+                        "start_date",
+                        e.target.value
+                    )
+                }
+            />
+            <InputError
+                className="col-span-10 col-offset-2"
+                message={errors.start_date}
+            />
+        </div>
+        <div className="col-span-5">
+            <DateInput
+                className="w-full"
+                name="end_date"
+                value={end_date || ""}
+                onChange={(e) =>
+                    setData(
+                        "end_date",
+                        e.target.value
+                    )
+                }
+            />
+            <InputError
+                className="mt-4"
+                message={errors.end_date}
+            />
+        </div>
+        </>
+    );
+}
+
+export function LatitudeLongitudeFields({
+    latitude,
+    longitude,
+    setData,
+    errors,
+}: {
+    latitude: number;
+    longitude: number;
+    setData: (key: string, value: any) => void;
+    errors: { [key: string]: string };
+}) {
+    return (
+        <>
+            <div className="col-span-2">
+                <InputLabel
+                    className="inline-block"
+                    value="Latitude"
+                    htmlFor="latitude"
+                />
+                ,{" "}
+                <InputLabel
+                    className="inline-block"
+                    value="Longitude"
+                    htmlFor="longitude"
+                />
+            </div>
+            <div className="col-span-5">
+                <TextInput
+                    className="w-full"
+                    name="latitude"
+                    value={latitude || ""}
+                    onChange={(e) =>
+                        setData(
+                            "latitude",
+                            Number(e.target.value)
+                        )
+                    }
+                />
+                <InputError
+                    className="mt-4"
+                    message={errors.latitude}
+                />
+            </div>
+            <div className="col-span-5">
+                <TextInput
+                    className="w-full"
+                    name="longitude"
+                    value={longitude || ""}
+                    onChange={(e) =>
+                        setData(
+                            "longitude",
+                            Number(e.target.value)
+                        )
+                    }
+                />
+                <InputError
+                    className="mt-4"
+                    message={errors.longitude}
+                />
+            </div>
+        </>
     );
 }
