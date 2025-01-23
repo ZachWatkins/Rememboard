@@ -6532,16 +6532,16 @@
         },
         {
             "name": "laravel-shift/blueprint",
-            "version": "v2.10.0",
+            "version": "v2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-shift/blueprint.git",
-                "reference": "05a9d91a3b2d849fdbc25317fa5242bb4bb346ce"
+                "reference": "ae0b14a297fe17e48d7553fe30b241aa1061add4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-shift/blueprint/zipball/05a9d91a3b2d849fdbc25317fa5242bb4bb346ce",
-                "reference": "05a9d91a3b2d849fdbc25317fa5242bb4bb346ce",
+                "url": "https://api.github.com/repos/laravel-shift/blueprint/zipball/ae0b14a297fe17e48d7553fe30b241aa1061add4",
+                "reference": "ae0b14a297fe17e48d7553fe30b241aa1061add4",
                 "shasum": ""
             },
             "require": {
@@ -6553,7 +6553,7 @@
                 "symfony/yaml": ">=6.2"
             },
             "require-dev": {
-                "laravel/pint": "^1.2",
+                "laravel/pint": "~1.18.0",
                 "mockery/mockery": "^1.4.4",
                 "orchestra/testbench": "^8.0|^9.0",
                 "phpunit/phpunit": "^10.0"
@@ -6586,9 +6586,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel-shift/blueprint/issues",
-                "source": "https://github.com/laravel-shift/blueprint/tree/v2.10.0"
+                "source": "https://github.com/laravel-shift/blueprint/tree/v2.11.0"
             },
-            "time": "2024-03-13T19:42:08+00:00"
+            "time": "2025-01-15T16:54:13+00:00"
         },
         {
             "name": "laravel-shift/faker-registry",
