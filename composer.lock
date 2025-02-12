@@ -6424,20 +6424,20 @@
         },
         {
             "name": "jasonmccreary/laravel-test-assertions",
-            "version": "v2.4.1",
+            "version": "v2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jasonmccreary/laravel-test-assertions.git",
-                "reference": "e60bc8c737e535e55ac85eacf61718616bf0e2d6"
+                "reference": "185a3ad9699505c53b7466a1dfa73a76d8daeeee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jasonmccreary/laravel-test-assertions/zipball/e60bc8c737e535e55ac85eacf61718616bf0e2d6",
-                "reference": "e60bc8c737e535e55ac85eacf61718616bf0e2d6",
+                "url": "https://api.github.com/repos/jasonmccreary/laravel-test-assertions/zipball/185a3ad9699505c53b7466a1dfa73a76d8daeeee",
+                "reference": "185a3ad9699505c53b7466a1dfa73a76d8daeeee",
                 "shasum": ""
             },
             "require": {
-                "illuminate/testing": "^10.0|^11.0",
+                "illuminate/testing": "^10.0|^11.0|^12.0",
                 "mockery/mockery": "^1.4.4",
                 "php": "^8.1",
                 "phpunit/phpunit": "^10.1|^11.0"
@@ -6468,9 +6468,9 @@
             "description": "A set of helpful assertions when testing Laravel applications.",
             "support": {
                 "issues": "https://github.com/jasonmccreary/laravel-test-assertions/issues",
-                "source": "https://github.com/jasonmccreary/laravel-test-assertions/tree/v2.4.1"
+                "source": "https://github.com/jasonmccreary/laravel-test-assertions/tree/v2.5.0"
             },
-            "time": "2024-06-10T14:00:38+00:00"
+            "time": "2025-02-11T16:56:31+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
@@ -6987,16 +6987,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.12.1",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845"
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/123267b2c49fbf30d78a7b2d333f6be754b94845",
-                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/024473a478be9df5fdaca2c793f2232fe788e414",
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414",
                 "shasum": ""
             },
             "require": {
@@ -7035,7 +7035,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/DeepCopy/issues",
-                "source": "https://github.com/myclabs/DeepCopy/tree/1.12.1"
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.13.0"
             },
             "funding": [
                 {
@@ -7043,7 +7043,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-11-08T17:47:46+00:00"
+            "time": "2025-02-12T12:17:51+00:00"
         },
         {
             "name": "nikic/php-parser",
