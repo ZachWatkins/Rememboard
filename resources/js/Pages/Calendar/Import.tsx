@@ -10,7 +10,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 export default function Import() {
     const { data, setData, post, progress } = useForm({
         file: null,
-        request_coordinates: false,
+        request_coordinates: false as boolean,
     });
 
     function submit(e: FormEvent) {

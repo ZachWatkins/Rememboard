@@ -1,7 +1,7 @@
 import { FormEventHandler } from "react";
 import { Event as EventModel } from "@/types";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, useForm, InertiaFormProps } from "@inertiajs/react";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
@@ -17,7 +17,7 @@ export default function Update({ event }: { event: EventModel }) {
         processing,
         errors,
         delete: destroy,
-    } = useForm(event);
+    } = useForm({...event});
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
